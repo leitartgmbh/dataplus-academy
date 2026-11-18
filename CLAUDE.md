@@ -111,7 +111,7 @@ Footer: "Dataplus · a Leitart solution · Berlin" · dataplusextension.com
 - Tenant Cleanup sheet: `https://leitart.eu.qlikcloud.com/sense/app/249acb4b-031c-4811-aaee-554f0d2c5cdb/sheet/ZrnYes/state/analysis`
 - Shopfloor / Quality Gate walkthrough: `../compass-group-shopfloor` (briefing page) and
   `../quality_gate_with_qlik_and_dataplus`; Quality Gate sheet
-  `https://leitart.eu.qlikcloud.com/sense/app/25a4a384-6f20-4b9f-b4ed-b8a017d50a69/sheet/PrNp/state/analysis`
+  `https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/PrNp/` (since 2026-11-18; before: app `25a4a384-6f20-4b9f-b4ed-b8a017d50a69`)
 - Docs: https://wiki.leitart.de/
 - Sheet URL pattern: `https://<host>/sense/app/<appId>/sheet/<sheetId>/state/analysis`
 
@@ -221,7 +221,7 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
     (Home, Scenario Management, Planning, Analysis, Agent Log), plus a **copy-ready Claude
     prompt panel** (prompts from `../customer-mashups/pages/qlik-data-in-action.js`
     `promptPanel` and `warsaw-cfo.prompts.js`).
-  - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `25a4a384…`, sheet `PrNp`).
+  - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `00ea92a4…`, sheet `PrNp`).
   - New in the kitchen / Cloud Admin Console → **Tenant Cleanup** sheet (app `249acb4b…`,
     sheet `ZrnYes`) next to the screenshot + waitlist CTA.
   - Data Quality extension → screenshot only (viewer app is in a personal space).

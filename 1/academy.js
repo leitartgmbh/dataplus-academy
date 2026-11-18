@@ -107,7 +107,7 @@
     }
     var isMail = l.kind === "mail" || /^mailto:/.test(l.url);
     var icon = isQlik ? ICON.qlik : (l.icon && ICON[l.icon]) || (isMail ? ICON.mail : l.kind === "recording" ? ICON.play : ICON.link);
-    return '<a class="qlink' + (l.primary ? " primary" : "") + '" href="' + esc(l.url) + '"' + (isMail ? "" : ' target="_blank" rel="noopener"') + q +
+    return '<a class="qlink' + (l.primary ? " primary" : "") + (isMail ? " mail" : "") + '" href="' + esc(l.url) + '"' + (isMail ? "" : ' target="_blank" rel="noopener"') + q +
       (isQlik ? ' title="' + esc(canEmbed ? "Opens full screen. Ctrl/Cmd-click for a new tab." : "Opens in Qlik (login required)") + '"' : "") + ">" +
       '<span class="ico">' + icon + '</span><span class="lbl"><b>' + esc(l.label) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : "") + "</span></a>";
   }
@@ -145,11 +145,24 @@
   }
 
   /* ---------- views ---------- */
-  function audienceHtml() {
-    return S.audience ? '<div class="ov-aud"><div class="eyebrow">Who it is for</div>' + (S.audience.groups || []).map(function (g) {
-      return '<div class="aud' + (g.highlight ? " why" : "") + '"><h3>' + esc(g.title) + "</h3><p>" + esc(g.text) + "</p></div>";
-    }).join("") + "</div>" : "";
+  // "What is the format" + "Who it is for": one block, label column on the left, content on the right
+  function metaRow(label, content) {
+    return '<div class="meta-label eyebrow">' + esc(label) + '</div><div class="meta-content">' + content + "</div>";
   }
+  function metaHtml(withFormat, withAudience) {
+    if (withAudience === undefined) withAudience = true;
+    var rows = "";
+    if (withFormat && S.format && S.format.length) {
+      rows += metaRow("What is the format", '<ul class="bfacts">' + S.format.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>");
+    }
+    if (withAudience && S.audience) {
+      rows += metaRow("Who it is for", '<div class="aud-cards">' + (S.audience.groups || []).map(function (g) {
+        return '<div class="aud' + (g.highlight ? " why" : "") + '"><h3>' + esc(g.title) + "</h3><p>" + esc(g.text) + "</p></div>";
+      }).join("") + "</div>");
+    }
+    return rows ? '<div class="ov-meta">' + rows + "</div>" : "";
+  }
+  function audienceHtml() { return metaHtml(false); }
 
   function overviewHtml(t0) {
     var facts = [
@@ -174,8 +187,7 @@
     var scale = "Times are minutes from the start" + (t0 ? ", clock times " + fmtClock(t0, true).split(" ").pop() : "") +
       (targets.length ? (canEmbed ? " · Qlik sheets open full screen" : " · Qlik sheets need a leitart Qlik login") : "");
 
-    var aud = (S.format && S.format.length ? '<div class="ov-format"><div class="eyebrow">What is the format</div><ul class="bfacts">' +
-      S.format.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></div>" : "") + audienceHtml();
+    var aud = metaHtml(true);
 
     return '<div class="ov">' +
       '<div class="ov-intro">' + (S.eyebrow ? '<div class="eyebrow">' + esc(S.eyebrow) + "</div>" : "") +
@@ -240,7 +252,7 @@
       (b.who ? '<div class="who">' + esc(b.who) + "</div>" : "") +
       (b.facts && b.facts.length ? '<ul class="bfacts" aria-label="Format">' + b.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>" : "") +
       headLinks + "</div></div>" +
-      body + (b.audience ? audienceHtml() : "") + "</div>";
+      body + (b.audience || b.format ? metaHtml(!!b.format, !!b.audience) : "") + "</div>";
   }
 
   // QR code as inline SVG (qrcode-generator from cdnjs); empty if the library did not load
@@ -253,17 +265,29 @@
       return '<svg viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" aria-hidden="true"><rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
     } catch (e) { return ""; }
   }
-  function engageHtml() {
+  // QR code for the engage link marked qr: true (e.g. "Save your seat" for the next session)
+  function qrBlockHtml() {
+    var E = S.engage;
+    var qrLink = E && (E.links || []).filter(function (l) { return l.qr; })[0];
+    var qr = qrLink ? qrSvg(qrLink.url) : "";
+    return qr ? '<a class="qr" href="' + esc(qrLink.url) + '" target="_blank" rel="noopener" aria-label="' + esc(qrLink.label) + ' (QR code)">' + qr + "</a>" : "";
+  }
+  // QR code with its link as a (coloured) button underneath, used next to the headline
+  function qrWithLinkHtml() {
+    var E = S.engage;
+    var qrLink = E && (E.links || []).filter(function (l) { return l.qr; })[0];
+    var qr = qrBlockHtml();
+    return qr ? '<div class="qr-stack">' + qr + linkHtml(qrLink, -1, {}) + "</div>" : "";
+  }
+  function engageHtml(withQr) {
     var E = S.engage;
     if (!E || !(E.links || []).length) return "";
-    var qrLink = E.links.filter(function (l) { return l.qr; })[0];
-    var qr = qrLink ? qrSvg(qrLink.url) : "";
-    return '<div class="nx-engage">' +
-      (qr ? '<a class="qr" href="' + esc(qrLink.url) + '" target="_blank" rel="noopener" aria-label="' + esc(qrLink.label) + ' (QR code)">' + qr +
-        "<span>Scan: " + esc(qrLink.label) + "</span></a>" : "") +
+    var qr = withQr ? qrBlockHtml() : "";
+    return '<div class="nx-engage' + (qr ? "" : " no-qr") + '">' + qr +
       '<div class="engage-main"><div class="eyebrow">' + esc(E.title || "How to engage") + "</div>" +
       (E.text ? "<p>" + esc(E.text) + "</p>" : "") +
-      '<div class="links grid">' + E.links.filter(visible).map(function (l) { return linkHtml(l, -1, {}); }).join("") + "</div></div>" +
+      '<div class="links grid">' + E.links.filter(visible).filter(function (l) { return withQr || !l.qr; })
+        .map(function (l) { return linkHtml(l, -1, {}); }).join("") + "</div></div>" +
       (E.teaser ? teaserCardHtml(E.teaser) : "") + "</div>";
   }
   function teaserCardHtml(t) {
@@ -274,18 +298,22 @@
   }
 
   function nextHtml(s) {
-    if (!s) return '<div class="nx only-engage">' + engageHtml() + "</div>";
+    if (!s) return '<div class="nx only-engage">' + engageHtml(true) + "</div>";
     var hasAgenda = s.blocks && s.blocks.length;
     var hasTeasers = !!(s.teasers && s.teasers.length);
-    return '<div class="nx' + (hasTeasers ? "" : " no-teasers") + '"><div>' +
+    // without teasers the QR code moves up: right-aligned, level with the headline
+    var topQr = hasTeasers ? "" : qrWithLinkHtml();
+    return '<div class="nx' + (hasTeasers ? "" : " no-teasers") + '">' + (hasTeasers ? "" : '<div class="nx-top">') + "<div>" +
       '<div class="eyebrow">Save the date' + (s.eyebrow ? " · " + esc(s.eyebrow) : "") + "</div><h2>" + esc(fullTitle(s)) + "</h2>" +
       '<div class="date">' + esc(fmtLongDate(s)) + (s.start ? " · " + esc(fmtClock(Date.parse(s.start), true)) : "") + "</div>" +
       (s.text || s.lead ? "<p>" + esc(s.text || s.lead) + "</p>" : "") +
-      (hasAgenda ? '<p><a href="#' + esc(s.id) + '">See the agenda</a></p>' : s.url ? '<p><a href="' + esc(s.url) + '">' + esc(s.urlLabel || "Event page") + "</a></p>" : "") + "</div>" +
-      '<div class="teasers">' + (s.teasers || []).map(function (t) {
+      (hasAgenda ? '<p><a href="#' + esc(s.id) + '">See the agenda</a></p>' : s.url ? '<p><a href="' + esc(s.url) + '">' + esc(s.urlLabel || "Event page") + "</a></p>" : "") +
+      (S.engage && S.engage.contact ? '<div class="links nx-contact">' + linkHtml(S.engage.contact, -1, {}) + "</div>" : "") + "</div>" +
+      (hasTeasers ? '<div class="teasers">' + s.teasers.map(function (t) {
         return '<div class="teaser' + (t.surprise ? " surprise" : "") + '"><h3>' + esc(t.title) + "</h3><p>" + esc(t.text) +
           (t.link ? ' <a href="' + esc(t.link.url) + '" target="_blank" rel="noopener">' + esc(t.link.label) + "</a>" : "") + "</p></div>";
-      }).join("") + "</div>" + engageHtml() + "</div>";
+      }).join("") + "</div>" : (topQr ? '<div class="nx-qr">' + topQr + "</div>" : "") + "</div>") +
+      engageHtml(hasTeasers) + "</div>";
   }
 
   /* ---------- render ---------- */

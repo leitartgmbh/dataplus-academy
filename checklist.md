@@ -37,18 +37,35 @@ while the next event is only a "Coming soon" page).
 
 ## 2 · Content of the session
 
-- [ ] `start` (ISO with offset), `duration`, block `from` / `minutes` add up to the duration.
+- [ ] **Date-time of the event** is set as `start` in `<n>/content/academy.js`, ISO with
+      offset, e.g. `"2026-11-24T16:00:00+01:00"` (CET; `+02:00` in summer time). It is the
+      default time reference for everything time-based: countdown (days/hours, then minutes
+      in the last hour), "Live now · minute N", clock times per block, the moving marker on the
+      agenda bar and "Ended / Recording follows". `?startsat=` only overrides it for testing.
+- [ ] Same date-time as on leitart.de, and the next session's `start` in the wrap-up entry.
+- [ ] `duration` and the blocks' `from` / `minutes` add up to the duration.
 - [ ] **"Who it is for"** (`audience`): still the right audience for this session's topics?
       It is copied along when the folder is branched, but may differ per session (e.g. admins
       for a Qlik Cloud admin topic, planners for a planning topic). Shown on the overview and
       the Welcome view.
 - [ ] **"What is the format"** (`format`): rhythm, time, duration, platform still as on
       leitart.de?
+- [ ] **Ask the presenters for the right Qlik app links** for each block (app and sheet
+      ids). Demo apps get copied, moved or replaced between sessions (e.g. 2026-11-18: the
+      Data+ Flow / Shopfloor block moved to app `00ea92a4…`); do not reuse links from the
+      previous folder unchecked.
 - [ ] Every Qlik link opens the intended sheet (logged-in browser) and "Open in Qlik" works.
 - [ ] Screenshots are current; no customer names or internal data visible in them.
 - [ ] Presenter photos and job titles in `assets/` are up to date; everyone shown agreed.
 - [ ] Copy-ready prompts match scenario names that exist in the planning app.
-- [ ] Wrap-up: next session, "How to engage" links, QR code scanned with a phone.
+- [ ] **Registration form for the next session:** get the HubSpot "Save your seat" link for
+      the *next* session (form URL with its `session=` parameter, as linked on leitart.de) and
+      put it into the wrap-up (`engage.links`, the entry with `primary: true, qr: true`).
+      The QR code next to the headline is generated from that link, so no image to make;
+      **scan it with a phone** to check it opens the right form for the right session.
+      While the next event is still a "Coming soon" page (`<n+1>/index.html`), put the same
+      link there too (its "Save your seat" button; the QR code is generated from it).
+- [ ] Wrap-up: next session (title, date, time, description), "How to engage" links.
 - [ ] Presenter-only links (`presenter: true`) still hidden without `?presenter=1`.
 
 ## 3 · Before publishing

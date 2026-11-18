@@ -12,7 +12,7 @@
      recording  URL once the recording exists, else null
      url        optional page for a later edition (e.g. "../2/"), linked from "Save the date"
      format     short pills for the "What is the format" row on the overview
-     engage     { title, links, teaser } for the wrap-up view; a link with qr: true also gets
+     engage     { title, links, teaser, contact } for the wrap-up view; a link with qr: true also gets
                 a QR code; teaser = { img, width, height, alt, text, url? } shown on the right
      presenters ids from ../assets/people.js, or { id, role } with a session role
      blocks     the agenda (sessions without blocks are shown as "Save the date")
@@ -33,6 +33,7 @@
      prompts         { title, note, items: [{ title, text }] }  copy-ready prompts
      presenters      true = show all session presenters in this block,
                      or a list of ids, e.g. ["leon-schmidt"]
+     format: true    repeat the session's "What is the format" row at the bottom of this block
      audience: true  repeat the session's "Who it is for" row at the bottom of this block
    ========================================================================== */
 (function () {
@@ -42,7 +43,7 @@
   var PLANNING = "5a9e541f-195f-4119-a331-5b302a5dd773";
   var WAITLIST = "https://waitlist.leitart.de";
   var DOCS = "https://wiki.leitart.de/";
-  var MAIL = { kind: "mail", label: "christof.schwarz@leitart.de", url: "mailto:christof.schwarz@leitart.de", hint: "For more questions" };
+  var MAIL = { kind: "mail", label: "For more questions", url: "mailto:christof.schwarz@leitart.de", hint: "christof.schwarz@leitart.de" };
   var SEAT_2 = "https://2d9kdh.share-eu1.hsforms.com/2MrnxkMtWTuGnnBCw-fAAqw?session=Office%20Hours%2002%20%C2%B7%2016%20Dec%202026";
 
   window.ACADEMY = {
@@ -85,7 +86,8 @@
             { kind: "link", label: "More info", url: "https://www.dataplusextension.com", hint: "www.dataplusextension.com" },
             { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" },
             { kind: "link", label: "Leitart", url: "https://www.leitart.de", hint: "www.leitart.de" },
-            { kind: "link", label: "YouTube", url: "https://www.youtube.com/@Leitart", hint: "@Leitart", icon: "play" },
+            { kind: "link", label: "Tutorials + Prod Videos", url: "https://www.youtube.com/@Leitart", hint: "youtube.com/@Leitart", icon: "play" },
+            { kind: "link", label: "Play with Data+", url: "https://demo-leitart.de.qlikcloud.com/sense/app/33f1e11d-9202-42b8-9b13-da3cd2c39f4d/sheet/eYjMVK/state/analysis", hint: "demo-leitart.de.qlikcloud.com", icon: "qlik" },
             MAIL
           ],
           teaser: {
@@ -96,7 +98,7 @@
         },
 
         /* "What is the format" row on the overview, as on leitart.de/en/data-plus-academy */
-        format: ["Every 3 weeks", "4 pm CET, rotating weekdays", "45 minutes", "Live on Microsoft Teams"],
+        format: ["Every 3 weeks", "16:00 CET", "Rotating weekdays", "45 minutes", "Live on Microsoft Teams"],
 
         audience: {
           title: "For people who want to know why it works, not only that it works",
@@ -113,6 +115,7 @@
             title: "Welcome",
             text: "Introduction to today's topics, the people presenting them, and how to send in your questions.",
             presenters: true,
+            format: true,
             audience: true
           },
           {
@@ -195,7 +198,7 @@
             chip: "Data+ Flow",
             text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, with the Quality Gate for visual inspection and quality review, right inside Qlik.",
             links: [
-              { kind: "qlik", label: "Quality Gate", url: sheet("25a4a384-6f20-4b9f-b4ed-b8a017d50a69", "PrNp"), hint: "Live sheet" }
+              { kind: "qlik", label: "Quality Gate", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/PrNp/", hint: "Live sheet" }
             ]
           },
           {

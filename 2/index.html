@@ -32,6 +32,7 @@
       --logo-dark: none; --logo-light: block; color-scheme: light;
     }
     * { box-sizing: border-box; }
+    [hidden] { display: none !important; }
     html, body { height: 100%; }
     body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 "Montserrat", Arial, Helvetica, sans-serif; }
     .page { min-height: 100%; display: flex; flex-direction: column; max-width: 1360px; margin: 0 auto;
@@ -58,6 +59,21 @@
     .icon-btn .sun { display: var(--logo-dark); }
     .icon-btn .moon { display: var(--logo-light); }
     footer { border-top: 1px solid var(--line); padding-top: 8px; font-size: 12px; color: var(--muted); }
+    /* text left, QR code right (level with the headline) */
+    .hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 32px; }
+    .hero > div:first-child { display: grid; gap: 18px; min-width: 0; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 12px; }
+    .actions .back { margin-top: 0; }
+    .seat { display: inline-flex; align-items: center; gap: 10px; padding: 12px 22px; text-decoration: none; font-weight: 600; color: #0F2326;
+      background: var(--accent); border-radius: 28px 0 28px 10px; }
+    .seat:hover { filter: brightness(1.08); }
+    .seat small { font-weight: 400; opacity: .8; }
+    .qr-stack { flex: none; display: grid; gap: 12px; padding-top: 30px; }
+    .qr-stack .seat { flex-direction: column; align-items: flex-start; gap: 0; }
+    .qr { display: grid; justify-items: center; gap: 8px; text-decoration: none; color: var(--fg-strong); font-size: 12px; font-weight: 600; }
+    .qr svg { display: block; width: clamp(140px, 26vh, 230px); height: auto; border-radius: 14px 0 14px 5px; }
+    .qr:hover svg { outline: 2px solid var(--accent); outline-offset: 3px; }
+    @media (max-width: 720px) { .hero { flex-direction: column; } .qr-stack { padding-top: 0; } }
     :focus-visible { outline: 2px solid var(--focus); outline-offset: 3px; }
   </style>
 </head>
@@ -76,14 +92,38 @@
     </header>
 
     <main>
-      <div class="eyebrow">Office Hours 02 · Building planning apps</div>
-      <h1>Coming <span>soon…</span></h1>
-      <div class="date">Wednesday, 16 December 2026 · 16:00 CET<small>The agenda follows here.</small></div>
-      <a class="back" href="../1/">Office Hours 01 <small>What's cooking in Data+ · 24 Nov 2026</small></a>
+      <div class="hero">
+        <div>
+          <div class="eyebrow">Office Hours 02 · Building planning apps</div>
+          <h1>Coming <span>soon…</span></h1>
+          <div class="date">Wednesday, 16 December 2026 · 16:00 CET<small>The agenda follows here.</small></div>
+          <div class="actions">
+            <a class="back" href="../1/">Office Hours 01 <small>What's cooking in Data+ · 24 Nov 2026</small></a>
+          </div>
+        </div>
+        <!-- QR code = the same registration link, and clickable -->
+        <div class="qr-stack">
+          <a class="qr" id="qr" href="https://2d9kdh.share-eu1.hsforms.com/2MrnxkMtWTuGnnBCw-fAAqw?session=Office%20Hours%2002%20%C2%B7%2016%20Dec%202026" target="_blank" rel="noopener" aria-label="Save your seat (QR code)" hidden><span id="qrSvg"></span></a>
+          <a class="seat" id="seat" href="https://2d9kdh.share-eu1.hsforms.com/2MrnxkMtWTuGnnBCw-fAAqw?session=Office%20Hours%2002%20%C2%B7%2016%20Dec%202026" target="_blank" rel="noopener">Save your seat <small>Session 02 · 16 Dec 2026</small></a>
+        </div>
+      </div>
     </main>
 
     <footer>Dataplus · a Leitart solution · Berlin</footer>
   </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"></script>
+  <script>
+    // QR code for the "Save your seat" link (same as on ../1/#next); hidden if the library did not load
+    (function () {
+      if (typeof window.qrcode !== "function") return;
+      var url = document.getElementById("seat").href;
+      var q = window.qrcode(0, "M"); q.addData(url); q.make();
+      var n = q.getModuleCount(), d = "";
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+      document.getElementById("qrSvg").innerHTML = '<svg viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" aria-hidden="true"><rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+      document.getElementById("qr").hidden = false;
+    })();
+  </script>
   <script>
     (function () {
       var root = document.documentElement;
