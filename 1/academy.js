@@ -74,6 +74,10 @@
 
   // ?startsat=2026-11-18T15:30:00 (ISO; without offset = local time) replaces the start of the
   // shown session, to test the countdown, live minute and the moving marker
+  // ?presenter=1 shows links marked presenter: true (e.g. the HubSpot question inbox)
+  var presenterMode = new URLSearchParams(location.search).get("presenter") === "1";
+  function visible(l) { return !l.presenter || presenterMode; }
+
   var startsAt = (function () {
     var v = new URLSearchParams(location.search).get("startsat");
     return v && !isNaN(Date.parse(v)) ? v : null;
@@ -108,7 +112,8 @@
       '<span class="ico">' + icon + '</span><span class="lbl"><b>' + esc(l.label) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : "") + "</span></a>";
   }
   function linksHtml(list, blockIndex, block, cls) {
-    if (!list || !list.length) return "";
+    list = (list || []).filter(visible);
+    if (!list.length) return "";
     return '<div class="links' + (cls ? " " + cls : "") + '">' + list.map(function (l) { return linkHtml(l, blockIndex, block); }).join("") + "</div>";
   }
   function tagHtml(t) {
@@ -169,7 +174,8 @@
     var scale = "Times are minutes from the start" + (t0 ? ", clock times " + fmtClock(t0, true).split(" ").pop() : "") +
       (targets.length ? (canEmbed ? " · Qlik sheets open full screen" : " · Qlik sheets need a leitart Qlik login") : "");
 
-    var aud = audienceHtml();
+    var aud = (S.format && S.format.length ? '<div class="ov-format"><div class="eyebrow">What is the format</div><ul class="bfacts">' +
+      S.format.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul></div>" : "") + audienceHtml();
 
     return '<div class="ov">' +
       '<div class="ov-intro">' + (S.eyebrow ? '<div class="eyebrow">' + esc(S.eyebrow) + "</div>" : "") +
@@ -231,7 +237,9 @@
       '<span class="now-badge" data-now="' + i + '" hidden>Now</span></div>' +
       '<div class="bv-text">' + tagHtml(b.tag) + "<h2>" + esc(b.title) + "</h2>" +
       (b.text ? "<p>" + esc(b.text) + "</p>" : "") +
-      (b.who ? '<div class="who">' + esc(b.who) + "</div>" : "") + headLinks + "</div></div>" +
+      (b.who ? '<div class="who">' + esc(b.who) + "</div>" : "") +
+      (b.facts && b.facts.length ? '<ul class="bfacts" aria-label="Format">' + b.facts.map(function (f) { return "<li>" + esc(f) + "</li>"; }).join("") + "</ul>" : "") +
+      headLinks + "</div></div>" +
       body + (b.audience ? audienceHtml() : "") + "</div>";
   }
 
@@ -255,7 +263,7 @@
         "<span>Scan: " + esc(qrLink.label) + "</span></a>" : "") +
       '<div class="engage-main"><div class="eyebrow">' + esc(E.title || "How to engage") + "</div>" +
       (E.text ? "<p>" + esc(E.text) + "</p>" : "") +
-      '<div class="links grid">' + E.links.map(function (l) { return linkHtml(l, -1, {}); }).join("") + "</div></div>" +
+      '<div class="links grid">' + E.links.filter(visible).map(function (l) { return linkHtml(l, -1, {}); }).join("") + "</div></div>" +
       (E.teaser ? teaserCardHtml(E.teaser) : "") + "</div>";
   }
   function teaserCardHtml(t) {
@@ -268,8 +276,9 @@
   function nextHtml(s) {
     if (!s) return '<div class="nx only-engage">' + engageHtml() + "</div>";
     var hasAgenda = s.blocks && s.blocks.length;
-    return '<div class="nx"><div>' +
-      '<div class="eyebrow">Save the date</div><h2>' + esc(fullTitle(s)) + "</h2>" +
+    var hasTeasers = !!(s.teasers && s.teasers.length);
+    return '<div class="nx' + (hasTeasers ? "" : " no-teasers") + '"><div>' +
+      '<div class="eyebrow">Save the date' + (s.eyebrow ? " · " + esc(s.eyebrow) : "") + "</div><h2>" + esc(fullTitle(s)) + "</h2>" +
       '<div class="date">' + esc(fmtLongDate(s)) + (s.start ? " · " + esc(fmtClock(Date.parse(s.start), true)) : "") + "</div>" +
       (s.text || s.lead ? "<p>" + esc(s.text || s.lead) + "</p>" : "") +
       (hasAgenda ? '<p><a href="#' + esc(s.id) + '">See the agenda</a></p>' : s.url ? '<p><a href="' + esc(s.url) + '">' + esc(s.urlLabel || "Event page") + "</a></p>" : "") + "</div>" +
@@ -312,7 +321,9 @@
       if (img.complete && !img.naturalWidth) hide(); else img.addEventListener("error", hide, { once: true });
     });
 
-    $("#topTitle").innerHTML = (S.eyebrow ? esc(S.eyebrow) + " · " : "") + "<b>" + esc(fullTitle(S)) + "</b>";
+    $("#topTitle").innerHTML = '<span class="tt">' + (S.eyebrow ? esc(S.eyebrow) + " · " : "") + "<b>" + esc(fullTitle(S)) + "</b></span>" +
+      '<svg class="caret" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>';
+    renderEventsMenu();
 
     $("#chips").innerHTML = views.map(function (v, k) {
       return '<li><button type="button" class="chip" data-view="' + k + '" style="--cc:' + colorVar(v.color) + '" aria-current="false"' +
@@ -536,6 +547,31 @@
     });
   });
 
+  /* ---------- events dropdown (title in the header) ---------- */
+  var EVENTS = window.ACADEMY_EVENTS || [];
+  var eventsMenu = $("#eventsMenu"), eventsBtn = $("#topTitle");
+  function currentFolder() {
+    var m = location.pathname.match(/\/([^\/]+)\/(?:index\.html)?$/);
+    return m ? m[1] : "";
+  }
+  function renderEventsMenu() {
+    var here = currentFolder();
+    eventsMenu.innerHTML = EVENTS.map(function (e) {
+      var d = e.date ? fmt({ day: "numeric", month: "short", year: "numeric" }, new Date(e.date + "T12:00:00Z")) : "";
+      var cur = e.folder === here;
+      return '<li><a href="../' + esc(e.folder) + '/"' + (cur ? ' aria-current="page"' : "") + ">" +
+        '<span class="ev-label">' + esc(e.label) + "</span>" +
+        '<span class="ev-title">' + esc(e.title || "") + "</span>" +
+        '<span class="ev-meta">' + esc(d) + (e.status ? " · " + esc(e.status) : "") + "</span></a></li>";
+    }).join("");
+  }
+  function setEventsMenu(open) {
+    eventsMenu.hidden = !open;
+    eventsBtn.setAttribute("aria-expanded", String(open));
+  }
+  eventsBtn.addEventListener("click", function (e) { e.stopPropagation(); setEventsMenu(eventsMenu.hidden); });
+  document.addEventListener("click", function (e) { if (!eventsMenu.hidden && !e.target.closest(".top-title-wrap")) setEventsMenu(false); });
+
   /* ---------- theme switcher (dark = leitart.de colours) ---------- */
   var themeBtn = $("#themeBtn");
   function effectiveTheme() {
@@ -616,6 +652,7 @@
     var key = e.key;
 
     if (!lb.hidden) { if (key === "Escape") { e.preventDefault(); closeLightbox(); } return; }
+    if (!eventsMenu.hidden && key === "Escape") { e.preventDefault(); setEventsMenu(false); eventsBtn.focus(); return; }
 
     if (viewerOpen() && key === "Escape") { e.preventDefault(); closeViewer(); return; }
     // all other keys work as without the viewer (navigating closes it)

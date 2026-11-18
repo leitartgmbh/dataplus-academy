@@ -19,10 +19,9 @@
     sessions: [
       {
         id: "2026-12",
-        eyebrow: "Data+ Academy #2 · December edition",
-        title: "Data+ Academy",
-        titleAccent: "#2",
-        lead: "",
+        eyebrow: "Office Hours 02",
+        title: "Building planning apps",
+        lead: "How to set up a planning app, step by step – a look under the hood of Data+ Forms and Data+ Table.",
         date: "2026-12-16",
         start: "2026-12-16T16:00:00+01:00",
         duration: 45,

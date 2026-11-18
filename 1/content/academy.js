@@ -11,6 +11,7 @@
      duration   minutes
      recording  URL once the recording exists, else null
      url        optional page for a later edition (e.g. "../2/"), linked from "Save the date"
+     format     short pills for the "What is the format" row on the overview
      engage     { title, links, teaser } for the wrap-up view; a link with qr: true also gets
                 a QR code; teaser = { img, width, height, alt, text, url? } shown on the right
      presenters ids from ../assets/people.js, or { id, role } with a session role
@@ -20,11 +21,13 @@
      from, minutes   offset from the start and length, in minutes
      title, text, who
      chip            optional short title for the chip row
+     facts           optional list of short pills under the text (e.g. the format)
      frame: true     dashed "frame" card (welcome, Q&A)
      tag             { label, color: "c1" | "c2" | "c3" | "gold" }
      figures         screenshots: { src, width, height, alt, title, text, tag, links }
                      or a text card: { kind: "list", title, tag, items: [{ title, text }] }
      links           { kind: "qlik" | "link" | "mail", label, url, hint }
+                     presenter: true → only shown with ?presenter=1 in the address
                        qlik → full-screen modal where embedding works, else new tab
                        link → new tab
      prompts         { title, note, items: [{ title, text }] }  copy-ready prompts
@@ -57,7 +60,7 @@
     sessions: [
       {
         id: "2026-11",
-        eyebrow: "November edition",
+        eyebrow: "Office Hours 01",
         title: "What's cooking in",
         titleAccent: "Data+",
         lead: "45 minutes on what's new across the Data Plus Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
@@ -78,7 +81,7 @@
         engage: {
           title: "How to engage",
           links: [
-            { kind: "link", label: "Save your seat", url: SEAT_2, hint: "Session 2 · 16 Dec 2026", primary: true, qr: true },
+            { kind: "link", label: "Save your seat", url: SEAT_2, hint: "Session 02 · 16 Dec 2026", primary: true, qr: true },
             { kind: "link", label: "More info", url: "https://www.dataplusextension.com", hint: "www.dataplusextension.com" },
             { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" },
             { kind: "link", label: "Leitart", url: "https://www.leitart.de", hint: "www.leitart.de" },
@@ -91,6 +94,9 @@
             text: "Watch for the Data+ Qlik Advent Calendar on LinkedIn soon …"
           }
         },
+
+        /* "What is the format" row on the overview, as on leitart.de/en/data-plus-academy */
+        format: ["Every 3 weeks", "4 pm CET, rotating weekdays", "45 minutes", "Live on Microsoft Teams"],
 
         audience: {
           title: "For people who want to know why it works, not only that it works",
@@ -199,24 +205,22 @@
             links: [
               { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" },
               { kind: "link", label: "More info", url: "https://www.dataplusextension.com", hint: "www.dataplusextension.com" },
-              MAIL
+              MAIL,
+              { kind: "link", label: "Submitted questions", url: "https://app-eu1.hubspot.com/submissions/143213669/form/0e265cc9-218e-4f62-b199-b027fff63298/submissions", hint: "HubSpot · presenter only", presenter: true }
             ]
           }
         ]
       },
 
       {
+        /* as announced on https://www.leitart.de/en/data-plus-academy (checked 2026-11-18) */
         id: "2026-12",
-        title: "Next session",
+        eyebrow: "Session 02",
+        title: "Building planning apps",
         date: "2026-12-16",
         start: "2026-12-16T16:00:00+01:00",
-        url: "../2/", urlLabel: "Data+ Academy #2",
-        text: "Our December edition goes deep on one product and adds help for Qlik Cloud admins.",
-        teasers: [
-          { title: "Data+ Table in depth", text: "A detailed look at the interactive writeback table for structured, row-based data entry in Qlik." },
-          { title: "New Qlik Cloud Admin support", text: "A closer look at the new Data+ Cloud Admin Console for teams running Qlik Cloud, including tenant cleanup. Early testers welcome.", link: { label: "waitlist.leitart.de", url: WAITLIST } },
-          { title: "Surprise topic", text: "We'll reveal it on the day.", surprise: true }
-        ]
+        url: "../2/", urlLabel: "Office Hours 02",
+        text: "How to set up a planning app, step by step – a look under the hood of Data+ Forms and Data+ Table."
       }
     ],
 

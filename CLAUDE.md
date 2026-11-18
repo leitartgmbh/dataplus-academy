@@ -56,6 +56,7 @@ previous folder. Things shared by all events live in `assets/` at the root.
 index.html              series root: forwards to the current edition (change "1/" when #2 goes live)
 assets/                 shared by all events
   people.js             presenter registry: id → name, job title, photo
+  events.js             list of event folders (label, title, date, status) for the header dropdown
   people/               presenter photos, <id>.jpg (square; missing → initials)
   logos/                logo-weiss.png (dark bg), logo-grau.png (light bg)
   fonts/                Montserrat 400/600/700 woff2
@@ -134,7 +135,9 @@ more room. Any navigation (chips, arrows, keys) closes it; the iframes
 stay loaded. **Live marker:** a vertical marker moves along the agenda bar (updated every
 second, animated) while the session runs, hidden before and after. Test it with
 `?startsat=2026-11-18T15:30:00` (ISO; without offset = local time), which replaces the
-session start for countdown, live minute and marker.
+session start for countdown, live minute and marker. **Presenter mode:** `?presenter=1` shows links marked
+`presenter: true` (Q&A: HubSpot "Submitted questions" inbox). Hidden for everyone else, but
+still readable in the page source (static site).
 
 **Theme switcher (2026-11-18):** sun/moon button in the header (and `T`), choice stored in
 `localStorage` (`academy-theme`). **Dark is the default for everyone** (the system
@@ -163,6 +166,10 @@ Dark by default, light variant via `prefers-color-scheme` and `data-theme`.
 - Mobile: works at phone width, 16 px side gutters, no horizontal scroll.
 
 ## Workflow: local first, then publish
+
+Per session, go through [`checklist.md`](checklist.md): above all, compare against the public
+announcement page https://www.leitart.de/en/data-plus-academy (session names, dates, next
+session, registration links) and note findings at the bottom of the checklist.
 
 Work against `npm start` (https://localhost:3000, the full-screen Qlik view works there).
 Publish only when asked: commit + `git push` to `main`; GitHub Pages rebuilds in about
