@@ -1,0 +1,9 @@
+{
+  "name": "dataplus-academy",
+  "private": true,
+  "description": "Data+ Academy: single-page agenda and link portal",
+  "scripts": {
+    "start": "npx --yes serve -l 3000 --ssl-cert ../customer-mashups/.cert/localhost.crt --ssl-key ../customer-mashups/.cert/localhost.key",
+    "start:http": "npx --yes serve -l 3000"
+  }
+}

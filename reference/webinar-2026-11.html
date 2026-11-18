@@ -1,0 +1,353 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Data+ Webinar November 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: dataplus look — slate ground, leaf-shaped shapes (75/0/75/25 radius), stacked agenda timeline, then save-the-date band */
+:root {
+  /* palette: #a6c7ce #266874 #fcd47c #ecbf3e #b1b5b4 #888d91 #f08d88 #b3524b #6cb0bb */
+  --bg: #3B4449;
+  --bg-deep: #30383C;
+  --surface: #465055;
+  --fg: #D3D7D6;
+  --fg-strong: #F4F6F6;
+  --muted: #B1B5B4;
+  --line: rgba(177, 181, 180, .24);
+  --accent: #6CB0BB;
+  --accent-ink: #13282C;
+  --c1: #6CB0BB;          /* teal */
+  --c2: #ECBF3E;          /* yellow */
+  --c3: #F08D88;          /* salmon */
+  --frame: #888D91;
+  --gold: #FCD47C;
+  --logo: #F4F6F6; --logo-shade: #B1B5B4;
+  --display: "Montserrat", Arial, Helvetica, sans-serif;
+  --body: "Montserrat", Arial, Helvetica, sans-serif;
+  --leaf: 75px 0 75px 25px;
+  --leaf-sm: 28px 0 28px 10px;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme="dark"]) {
+    --bg: #F2F5F5; --bg-deep: #E2EAEC; --surface: #FFFFFF;
+    --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
+    --line: rgba(59, 68, 73, .16); --accent: #266874; --accent-ink: #FFFFFF;
+    --c1: #266874; --c2: #ECBF3E; --c3: #B3524B; --frame: #B1B5B4; --gold: #B3524B;
+    --logo: #3D4548; --logo-shade: #596469;
+    color-scheme: light;
+  }
+}
+:root[data-theme="light"] {
+  --bg: #F2F5F5; --bg-deep: #E2EAEC; --surface: #FFFFFF;
+  --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
+  --line: rgba(59, 68, 73, .16); --accent: #266874; --accent-ink: #FFFFFF;
+  --c1: #266874; --c2: #ECBF3E; --c3: #B3524B; --frame: #B1B5B4; --gold: #B3524B;
+  --logo: #3D4548; --logo-shade: #596469;
+  color-scheme: light;
+}
+
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--body); font-size: 16px; line-height: 1.6; }
+.wrap { max-width: 1040px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; color: var(--fg-strong); text-wrap: balance; margin: 0; }
+.eyebrow { font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
+
+/* header */
+.logo { height: 64px; width: auto; display: block; }
+.lg-a { fill: var(--logo); } .lg-b { fill: var(--logo-shade); }
+header .wrap { display: flex; align-items: center; justify-content: space-between; padding-block: 22px; gap: 16px; }
+.mark { font-family: var(--display); font-weight: 700; font-size: 22px; line-height: .82; color: var(--fg-strong); letter-spacing: -.02em; }
+.mark small { display: block; font-family: var(--body); font-size: 7px; letter-spacing: .18em; font-weight: 600; color: var(--muted); margin-top: 5px; text-transform: uppercase; }
+.live-pill { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; padding: 7px 14px; border: 1px solid var(--line); border-radius: var(--leaf-sm); color: var(--fg); }
+.live-pill i { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 0 var(--accent); animation: pulse 2s infinite; }
+@keyframes pulse { 0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 60%, transparent); } 70% { box-shadow: 0 0 0 9px transparent; } 100% { box-shadow: 0 0 0 0 transparent; } }
+
+/* hero */
+.hero { padding-block: 40px 56px; }
+.hero h1 { font-size: clamp(38px, 7vw, 72px); line-height: 1.04; letter-spacing: -.02em; margin-top: 14px; max-width: 14ch; }
+.hero h1 span { color: var(--accent); }
+.hero p.lead { max-width: 58ch; font-size: 18px; margin: 22px 0 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 32px; }
+.fact { background: var(--surface); border-radius: var(--leaf-sm); padding: 14px 22px; min-width: 0; }
+.fact b { display: block; font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--fg-strong); font-variant-numeric: tabular-nums; }
+.fact span { font-size: 12px; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); font-weight: 600; }
+.fact.count { background: var(--accent); }
+.fact.count b, .fact.count span { color: var(--accent-ink); }
+
+/* audience */
+.audience { padding-block: 0 40px; }
+.aud-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 14px; margin-top: 18px; }
+.aud { border: 1px solid var(--line); border-radius: 22px; padding: 22px 24px; min-width: 0; }
+.aud h3 { font-size: 18px; line-height: 1.3; }
+.aud p { margin: 8px 0 0; font-size: 15px; }
+.aud.why { border-color: var(--accent); }
+.aud.why h3 { color: var(--accent); }
+@media (max-width: 720px) { .aud-grid { grid-template-columns: 1fr; } }
+
+/* agenda */
+.agenda { padding-block: 24px 64px; }
+.section-head { display: flex; flex-wrap: wrap; align-items: end; justify-content: space-between; gap: 12px 24px; margin-bottom: 28px; }
+.section-head h2 { font-size: clamp(28px, 4vw, 40px); margin-top: 8px; }
+.scale { font-size: 13px; color: var(--muted); }
+
+.bar { display: flex; height: 10px; border-radius: 10px; overflow: hidden; gap: 3px; margin-bottom: 34px; }
+.bar span { background: var(--line); }
+.bar span.main { background: var(--accent); }
+.bar span.frame { background: var(--frame); opacity: .7; }
+
+.items { list-style: none; margin: 0; padding: 0; display: grid; gap: 14px; }
+.item { display: grid; grid-template-columns: 112px 1fr; gap: 24px; padding: 26px 28px; background: var(--surface); border-radius: 22px; border: 1px solid transparent; transition: border-color .2s; }
+.item.frame { background: transparent; border: 1px dashed var(--line); }
+.item.now { border-color: var(--accent); }
+.item[data-from="3"] { box-shadow: inset 4px 0 0 var(--c1); } .item[data-from="15"] { box-shadow: inset 4px 0 0 var(--c2); } .item[data-from="27"] { box-shadow: inset 4px 0 0 var(--c3); }
+.time { font-family: var(--display); font-weight: 600; color: var(--fg-strong); font-variant-numeric: tabular-nums; font-size: 18px; line-height: 1.3; }
+.time small { display: block; font-family: var(--body); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--accent); margin-top: 6px; }
+.body { min-width: 0; }
+.body h3 { font-size: 22px; line-height: 1.25; }
+.body p { margin: 8px 0 0; max-width: 64ch; }
+.tag { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; padding: 4px 11px; border-radius: 12px 0 12px 4px; --tc: var(--c1); background: color-mix(in srgb, var(--tc) 20%, transparent); color: var(--fg-strong); margin-bottom: 10px; }
+.tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--tc); }
+.tag.y { --tc: var(--c2); } .tag.r { --tc: var(--c3); }
+.tag.alt { background: color-mix(in srgb, var(--gold) 20%, transparent); color: var(--gold); }
+.who { margin-top: 12px; font-size: 14px; color: var(--muted); }
+.who b { color: var(--fg); font-weight: 600; }
+
+.shots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 18px; }
+.shot { aspect-ratio: 16/10; max-width: 100%; border-radius: var(--leaf-sm); border: 1px dashed var(--line); display: grid; place-items: center; text-align: center; font-size: 12px; color: var(--muted); padding: 10px; background: repeating-linear-gradient(135deg, transparent 0 10px, color-mix(in srgb, var(--fg) 4%, transparent) 10px 11px); }
+
+.feature + .feature { margin-top: 14px; }
+.feature { margin: 18px 0 0; background: var(--bg-deep); border-radius: 22px; overflow: hidden; }
+.zoom { display: block; width: 100%; padding: 0; border: 0; background: #fff; cursor: zoom-in; }
+.zoom img { display: block; width: 100%; height: auto; }
+.zoom:focus-visible, .cta:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.feature figcaption { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px 24px; padding: 20px 24px 22px; }
+.feature figcaption > div { min-width: 0; flex: 1 1 320px; }
+.feature h4 { font-family: var(--display); font-weight: 600; font-size: 18px; color: var(--fg-strong); margin: 0; }
+.feature p { font-size: 15px; margin: 6px 0 0; }
+.cta { display: inline-block; background: var(--accent); color: var(--accent-ink); font-weight: 600; font-size: 15px; text-decoration: none; padding: 12px 26px; border-radius: var(--leaf-sm); white-space: nowrap; }
+.cta:hover { filter: brightness(1.08); }
+.shots.two { }
+.lightbox { position: fixed; inset: 0; z-index: 50; background: rgba(14, 18, 20, .92); display: grid; place-items: center; padding: max(16px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(16px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); cursor: zoom-out; }
+.lightbox[hidden] { display: none; }
+.lightbox img { max-width: 100%; max-height: 100%; border-radius: 8px; }
+.shots { grid-template-columns: 1fr !important; }
+.shots .shot { aspect-ratio: auto; padding: 22px; }
+
+/* next session */
+.next { background: var(--bg-deep); }
+.next .wrap { padding-block: 64px; display: grid; grid-template-columns: 1fr 1.25fr; gap: 40px; align-items: start; }
+.next h2 { font-size: clamp(28px, 4vw, 40px); margin-top: 8px; }
+.next .date { font-family: var(--display); font-weight: 600; font-size: 20px; color: var(--accent); margin-top: 14px; }
+.next p { max-width: 46ch; }
+.teasers { display: grid; gap: 12px; min-width: 0; }
+.teaser { padding: 20px 24px; border-radius: 22px; border: 1px solid var(--line); }
+.teaser h3 { font-size: 18px; }
+.teaser p { margin: 6px 0 0; font-size: 15px; }
+.teaser.surprise { border-style: dashed; border-color: var(--gold); }
+.teaser.surprise h3 { color: var(--gold); }
+
+footer .wrap { padding-block: 28px; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px; font-size: 13px; color: var(--muted); }
+
+@media (max-width: 720px) {
+  .item { grid-template-columns: 1fr; gap: 10px; padding: 22px; }
+  .next .wrap { grid-template-columns: 1fr; gap: 28px; }
+  .shots { grid-template-columns: 1fr 1fr; }
+}
+@media (prefers-reduced-motion: reduce) { .live-pill i { animation: none; } }
+</style>
+
+<header>
+  <div class="wrap">
+    <svg class="logo" xmlns="http://www.w3.org/2000/svg" viewBox="205 215 715 685" role="img" aria-label="dataplus – a Leitart solution"><g><path class="lg-a" d="m739.79,440.61c-.8-.93-2.16-1.55-3.7-1.55h-38.81c-2.45,0-4.44,1.55-4.44,3.46v31.89c0,20.07-9.520,29.66-26.37,29.66-8.13,0-14.42-2.1-18.81-6.39-4.92-4.88-7.43-12.56-7.43-23.16v-39.03c-8.23,2.020-16.83,3.090-25.68,3.090-7.59,0-14.99-.79-22.15-2.29v40.27c0,16.86,4.98,30.69,14.64,40.9,12.34,13.13,32.39,20.31,59.53,20.31,48.24,0,74.07-22.69,74.07-61.1v-34.05c0-.76-.32-1.45-.86-2.02Z"/><path class="lg-a" d="m356.62,223.94h-37.12c-2.45,0-4.44,1.49-4.44,3.33v.48c0,2.91-.2,98.64-3.02,96.65-8.61-6.08-26.48-10.31-39.06-10.31-45.42,0-66.75,21.03-66.75,58.88v105.57c0,37.87,21.33,58.9,66.75,58.9,12.58,0,26.03-3.51,34.64-9.58,2.83-2,7.45-.49,7.45,2.42v.47c0,1.84,1.99,3.33,4.44,3.33h37.12c2.450,0,4.44-1.49,4.44-3.33V227.27c0-1.84-1.99-3.33-4.44-3.33Zm-43.24,252.52c0,19.35-11.8,28.59-29.73,28.59s-29.75-9.24-29.75-28.59v-101.38c0-19.35,11.79-28.61,29.75-28.61s29.73,9.26,29.730,28.61v101.38Z"/><path class="lg-a" d="m906.4,312.57h-36.53c-2.42,0-4.37,1.52-4.37,3.4v.49c0,2.97-4.55,4.51-7.33,2.47-8.47-6.2-21.7-9.79-34.08-9.79-44.69,0-65.68,21.46-65.68,60.1v107.75c0,38.65,20.99,60.12,65.68,60.12,12.38,0,25.61-3.58,34.08-9.78,2.78-2.04,7.33-.5,7.33,2.47v.48c0,1.88,1.96,3.4,4.37,3.4h36.53c2.42,0,4.37-1.52,4.37-3.4v-214.32c0-1.88-1.96-3.4-4.37-3.4Zm-42.54,162.3c0,19.75-11.61,29.18-29.26,29.18s-29.27-9.43-29.27-29.18v-103.48c0-19.75,11.6-29.2,29.27-29.2s29.26,9.45,29.26,29.2v103.48Z"/><path class="lg-a" d="m507.56,330.63c0-6.1.52-12.07,1.49-17.9l-11.9-.17c-2.42,0-4.37,1.52-4.37,3.4v.49c0,2.97-4.55,4.51-7.33,2.47-8.47-6.21-21.7-9.79-34.08-9.79-44.69,0-65.68,21.46-65.68,60.1v107.75c0,38.65,20.99,60.12,65.68,60.12,12.38,0,25.61-3.58,34.08-9.78,2.78-2.04,7.33-.5,7.33,2.48v.48c0,1.88,1.96,3.4,4.37,3.4h36.53c2.42,0,4.37-1.52,4.37-3.4v-124.56c-18.86-19.44-30.49-45.94-30.49-75.1Zm-16.43,144.24c0,19.75-11.61,29.18-29.26,29.18s-29.27-9.43-29.27-29.18v-103.48c0-19.75,11.6-29.2,29.27-29.2s29.26,9.45,29.26,29.2v103.48Z"/><path class="lg-a" d="m306.93,857.05h-16.9l-5.02,7.91h-4.88l20.7-31.64h4.47l8,31.64h-4.47l-1.9-7.91Zm-.9-3.62l-3.75-15.59-9.94,15.59h13.7Z"/><path class="lg-a" d="m336.94,833.32h4.52l-5.56,27.71h17.18l-.77,3.93h-21.7l6.33-31.64Z"/><path class="lg-a" d="m367.73,837.26l-1.94,9.72h15.91l-.77,3.84h-15.91l-2.03,10.22h18.49l-.77,3.93h-23.01l6.33-31.64h22.33l-.77,3.930h-17.85Z"/><path class="lg-a" d="m394.53,833.32h4.52l-6.33,31.64h-4.52l6.33-31.64Z"/><path class="lg-a" d="m414.24,837.26h-10.8l.77-3.93h26.17l-.81,3.93h-10.8l-5.56,27.71h-4.47l5.51-27.71Z"/><path class="lg-a" d="m449.64,857.05h-16.9l-5.02,7.91h-4.88l20.7-31.64h4.47l8,31.64h-4.47l-1.9-7.91Zm-.9-3.62l-3.75-15.59-9.94,15.59h13.7Z"/><path class="lg-a" d="m481.23,854.66l5.79,10.31h-4.79l-5.51-9.67h-9.31l-1.9,9.67h-4.57l6.33-31.64h11.8c7.41,0,11.66,3.39,11.66,9.27,0,6.28-3.53,10.53-9.49,12.07Zm4.97-11.66c0-3.8-2.71-5.74-7.55-5.74h-7.64l-2.85,14.19h7.82c6.46,0,10.22-2.89,10.22-8.45Z"/><path class="lg-a" d="m505.37,837.26h-10.8l.77-3.93h26.17l-.81,3.93h-10.8l-5.56,27.71h-4.47l5.51-27.71Z"/><path class="lg-a" d="m530.64,861.48l1.99-3.62c2.4,2.22,6.33,3.62,10.26,3.62,5.11,0,8.54-1.94,8.54-5.38,0-6.6-16.23-3.21-16.23-13.33,0-6.06,5.42-9.81,13.15-9.81,3.89,0,7.59.95,10.17,2.67l-1.81,3.71c-2.35-1.67-5.38-2.53-8.59-2.53-5.2,0-8.5,2.22-8.5,5.56,0,6.65,16.23,3.48,16.23,13.11,0,6.15-5.51,9.85-13.38,9.85-4.84,0-9.54-1.67-11.84-3.84Z"/><path class="lg-a" d="m561.38,851.99c0-10.53,7.55-19.03,19.21-19.03,9.45,0,14.92,5.42,14.92,13.33,0,10.53-7.59,19.03-19.26,19.03-9.45,0-14.87-5.42-14.87-13.33Zm29.56-5.42c0-5.7-3.71-9.58-10.71-9.58-8.77,0-14.33,6.78-14.33,14.74,0,5.7,3.75,9.58,10.76,9.58,8.77,0,14.28-6.78,14.28-14.74Z"/><path class="lg-a" d="m605.54,833.32h4.52l-5.56,27.71h17.18l-.77,3.93h-21.7l6.33-31.64Z"/><path class="lg-a" d="m627.87,854.75c0-1.08.14-2.21.36-3.43l3.57-17.99h4.52l-3.62,17.94c-.23,1.09-.32,2.08-.32,2.98,0,4.66,2.76,7.05,7.77,7.05,5.61,0,9-3.12,10.4-10.08l3.57-17.9h4.43l-3.62,18.21c-1.85,9.22-7.01,13.79-15.19,13.79-7.5,0-11.89-3.98-11.89-10.58Z"/><path class="lg-a" d="m672.94,837.26h-10.8l.77-3.93h26.17l-.81,3.93h-10.8l-5.56,27.71h-4.47l5.51-27.71Z"/><path class="lg-a" d="m694.23,833.32h4.52l-6.33,31.64h-4.52l6.33-31.64Z"/><path class="lg-a" d="m702.5,851.99c0-10.53,7.55-19.03,19.21-19.03,9.45,0,14.92,5.42,14.92,13.33,0,10.53-7.59,19.03-19.26,19.03-9.45,0-14.87-5.42-14.87-13.33Zm29.56-5.42c0-5.7-3.71-9.58-10.71-9.58-8.77,0-14.33,6.78-14.33,14.74,0,5.7,3.75,9.58,10.76,9.58,8.77,0,14.28-6.78,14.28-14.74Z"/><path class="lg-a" d="m773.88,833.32l-6.33,31.64h-3.71l-14.15-24.36-4.84,24.36h-4.52l6.33-31.64h3.71l14.15,24.36,4.84-24.36h4.52Z"/><path class="lg-a" d="m219.67,887.06h35c2.31,0,4.19-1.4,4.19-3.12v-.45c0-2.72.18-92.23,2.85-90.37,8.12,5.68,24.97,9.64,36.83,9.64,42.83,0,62.94-19.66,62.94-55.05v-98.71c0-35.41-20.11-55.07-62.94-55.07-11.86,0-24.54,3.28-32.66,8.96-2.67,1.87-7.02.46-7.02-2.27v-.44c0-1.72-1.88-3.12-4.19-3.12h-35c-2.31,0-4.19,1.39-4.19,3.12v283.76c0,1.72,1.88,3.12,4.19,3.12Zm40.77-236.11c0-18.09,11.13-26.73,28.04-26.73s28.05,8.64,28.05,26.73v94.79c0,18.09-11.11,26.75-28.05,26.75s-28.04-8.66-28.04-26.75v-94.79Z"/><path class="lg-a" d="m574.85,597.81v145.89c0,18.62-10.59,27.53-27.51,27.53s-27.51-8.91-27.51-27.53v-145.89h-45.49v147.91c0,36.01,27.52,56.65,73,56.65s72.48-20.64,72.48-56.65v-147.91h-44.97Z"/><path class="lg-a" d="m793.95,659.37v-10.14c0-35-27.52-55.05-73-55.05-45.49,0-72.48,20.06-72.48,55.05l.07,14.71.35,1.33c1.95,7.48,2.8,14.28,7.05,21.09,3.96,6.33,9.51,11.62,15.96,15.64,16.84,10.49,35.09,10.32,54.25,11.54,13.9.88,21.95,11.42,22.58,24.05v8.53c0,18.09-10.59,26.75-27.51,26.75-15.77,0-26.01-7.51-27.35-23.14h-45.61c.86,33.97,28.2,53.41,72.96,53.41,45.49,0,72.48-20.06,72.48-55.05l-.2-8.43h.26s0-1.94,0-1.94c0-36.36-32.66-53.76-67.18-54.96-9.08-.31-17.79.21-25.18-5.83-2.74-2.24-4.72-5.12-5.970-8.34-.41-1.05-2.71-11.86-1.91-11.86h-.07s0-5.53,0-5.53c0-18.09,10.59-26.75,27.51-26.75,16.94,0,27.51,8.66,27.51,26.75v8.17s45.49,0,45.49,0Z"/><path class="lg-a" d="m394.73,545.68v248.16c0,1.72,1.88,3.12,4.19,3.12h36.6c2.31,0,4.19-1.4,4.19-3.12l-.18-234.06c-25-2-26-4-44.8-14.1Z"/><path class="lg-b" d="m418.64,556.85c-7.46-1.98-12.34-5.12-23.59-11.17v74.61c10.96-10.72,19.65-34.22,23.59-63.44Z"/><path class="lg-a" d="m700.1,312.73h-54.69c-3.1,0-5.62-2.52-5.62-5.62v-59.1c0-3.1-2.52-5.62-5.62-5.62h-37.46c-3.1,0-5.62,2.52-5.62,5.62v59.1c0,3.1-2.52,5.62-5.62,5.62h-54.69c-3.1,0-5.62,2.52-5.62,5.62v23.07c0,3.1,2.52,5.62,5.62,5.62h54.69c3.1,0,5.62,2.52,5.62,5.62v42.3h0v22.84c7.86,2.24,16.14,3.47,24.69,3.57,8.3-.07,16.35-1.22,24.01-3.31v-18.82h0v-46.58c0-3.1,2.52-5.62,5.62-5.62h54.69c3.1,0,5.62-2.52,5.62-5.62v-23.07c0-3.1-2.52-5.62-5.62-5.62Z"/><path class="lg-b" d="m615.86,242.12h-18.68s-.08,0-.12,0c-.39.05-.78.1-1.16.15-2.48.58-4.33,2.81-4.33,5.47v59.1c0,2.78-2.02,5.08-4.67,5.54v1.03c15.93-3.92,28.43-34.61,28.98-71.29Z"/></g></svg>
+    <div class="live-pill" id="status"><i></i><span>Live webinar · 24 Nov 2026</span></div>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="eyebrow">Data+ Webinar · November edition</div>
+      <h1>What's cooking in <span>Data+</span></h1>
+      <p class="lead">45 minutes on what's new across the Data Plus Extension family: planning with Claude, and a look behind a real shopfloor app built with Data+ Forms. The session is held in English.</p>
+      <div class="facts">
+        <div class="fact"><span>Date</span><b>Tue, 24 Nov 2026</b></div>
+        <div class="fact"><span>Duration</span><b>45 min</b></div>
+        <div class="fact"><span>Language</span><b>English</b></div>
+        <div class="fact count"><span id="countLabel">Starts in</span><b id="countdown">–</b></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="audience" aria-labelledby="aud-h">
+    <div class="wrap">
+      <div class="eyebrow">Who this session is for</div>
+      <h2 id="aud-h" style="font-size:clamp(24px,3.4vw,32px);margin-top:8px;max-width:30ch">For people who want to know why it works, not only that it works</h2>
+      <div class="aud-grid">
+        <div class="aud"><h3>Developers building with Data+</h3><p>You build Qlik apps with Data+ and want to see what's new and how to use it in your own projects.</p></div>
+        <div class="aud"><h3>Consultants at partners</h3><p>You implement Data+ for customers and need the details behind each feature to advise them well.</p></div>
+        <div class="aud why"><h3>Anyone who asks why</h3><p>Things running smoothly isn't enough for you. You want to understand how they work under the hood.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="agenda" aria-labelledby="agenda-h">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <div class="eyebrow">Agenda</div>
+          <h2 id="agenda-h">Five blocks, 45 minutes</h2>
+        </div>
+        <div class="scale">Times are minutes from the start</div>
+      </div>
+
+      <div class="bar" aria-hidden="true">
+        <span class="frame" style="flex:3"></span>
+        <span class="main" style="flex:12;background:var(--c1)"></span>
+        <span class="main" style="flex:12;background:var(--c2)"></span>
+        <span class="main" style="flex:10;background:var(--c3)"></span>
+        <span class="frame" style="flex:8"></span>
+      </div>
+
+      <ol class="items">
+        <li class="item frame" data-from="0" data-to="3">
+          <div class="time">0:00<small>3 min</small></div>
+          <div class="body">
+            <h3>Welcome</h3>
+            <p>Introduction to today's topics and how to send in your questions.</p>
+            <div class="who">Moderator: <b>Christof Schwarz</b></div>
+          </div>
+        </li>
+        <li class="item" data-from="3" data-to="15">
+          <div class="time">0:03<small>12 min</small></div>
+          <div class="body">
+            <span class="tag">Product news</span>
+            <h3>New in the kitchen</h3>
+            <p>The latest additions across the Data Plus Extension family, shown live in Qlik, including first looks at the new Cloud Admin Console, the Data Quality extension and sheet publishing in Hello Data+.</p>
+            <figure class="feature">
+              <button type="button" class="zoom" aria-label="Enlarge screenshot of the Data+ Cloud Admin Console">
+                <img src="../media/screenshots/cloud-admin-console.webp" alt="Data+ Cloud Admin Console, User Space Rights view: a matrix of users and Qlik Cloud spaces showing each user's roles, assigned directly or via groups" width="1600" height="905">
+              </button>
+              <figcaption>
+                <div><span class="tag">New</span><h4>Data+ Cloud Admin Console</h4>
+                <p>See who has which role in which Qlik Cloud space, directly or through groups, in one matrix. Also included: user group assignment, user roles and audit reports.</p></div>
+                <a class="cta" href="https://waitlist.leitart.de" target="_blank" rel="noopener">Become an early tester</a>
+              </figcaption>
+            </figure>
+            <figure class="feature">
+              <button type="button" class="zoom" aria-label="Enlarge screenshot of the Data Quality extension">
+                <img src="../media/screenshots/data-quality-extension.webp" alt="Data Quality extension on a table of one million article rows: a 90.7% quality score, rule tiles for null, empty, email, too cheap and custom checks with row counts, and per-row issue badges" width="1614" height="711" loading="lazy">
+              </button>
+              <figcaption>
+                <div><span class="tag r">New</span><h4>Data Quality extension</h4>
+                <p>Define checks such as null, empty, email format, price too low or your own rule, and see the quality score, hits per column and issues per row at a glance. Shown here on 1,000,000 rows.</p></div>
+              </figcaption>
+            </figure>
+            <figure class="feature">
+              <button type="button" class="zoom" aria-label="Enlarge screenshot of Hello Data+">
+                <img src="../media/screenshots/hello-dataplus-publish.webp" alt="Hello Data+ dialog Publish objects to origin sheet: source and copied sheet side by side, with moved objects in red, an added object in green, and a summary of 2 moved, 1 removed and 1 added object" width="1205" height="825" loading="lazy">
+              </button>
+              <figcaption>
+                <div><span class="tag y">New</span><h4>Hello Data+: publish objects to the origin sheet</h4>
+                <p>Rework a copy of a sheet, compare it visually with the original and see which objects were moved, removed or added. Then sync all changes back to the origin sheet in one click.</p></div>
+              </figcaption>
+            </figure>
+          </div>
+        </li>
+        <li class="item" data-from="15" data-to="27">
+          <div class="time">0:15<small>12 min</small></div>
+          <div class="body">
+            <span class="tag y">AI in practice</span>
+            <h3>Financial Planning with the help of Claude</h3>
+            <p>How Claude supports budgeting and forecasting on top of Qlik apps with Data+ writeback.</p>
+          </div>
+        </li>
+        <li class="item" data-from="27" data-to="37">
+          <div class="time">0:27<small>10 min</small></div>
+          <div class="body">
+            <span class="tag r">Data+ Forms</span>
+            <h3>Shopfloor App under the hood</h3>
+            <p>A walk through the building blocks of a shopfloor data-entry app made with Data+ Forms.</p>
+          </div>
+        </li>
+        <li class="item frame" data-from="37" data-to="45">
+          <div class="time">0:37<small>8 min</small></div>
+          <div class="body">
+            <h3>Q&amp;A</h3>
+            <p>Your questions, answered live.</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="next" aria-labelledby="next-h">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">Save the date</div>
+        <h2 id="next-h">Next session</h2>
+        <div class="date">Wednesday, 16 December 2026</div>
+        <p>Our December edition goes deep on one product and adds help for Qlik Cloud admins.</p>
+      </div>
+      <div class="teasers">
+        <div class="teaser"><h3>Data+ Table in depth</h3><p>A detailed look at the interactive writeback table for structured, row-based data entry in Qlik.</p></div>
+        <div class="teaser"><h3>New Qlik Cloud Admin support</h3><p>A closer look at the new Data+ Cloud Admin Console for teams running Qlik Cloud, including tenant cleanup. Early testers welcome: <a href="https://waitlist.leitart.de" target="_blank" rel="noopener" style="color:var(--accent)">waitlist.leitart.de</a></p></div>
+        <div class="teaser surprise"><h3>Surprise topic</h3><p>We'll reveal it on the day.</p></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div class="lightbox" id="lightbox" hidden></div>
+
+<footer>
+  <div class="wrap">
+    <span>Dataplus · a Leitart solution · Berlin</span>
+    <span>dataplusextension.com</span>
+  </div>
+</footer>
+
+<script>
+(function () {
+  // Start time is not fixed yet. Set START to e.g. "2026-11-24T16:00:00+01:00" to enable the live minute tracker.
+  var START = null;
+  var DAY = new Date("2026-11-24T00:00:00+01:00");
+  var cd = document.getElementById("countdown");
+  var lbl = document.getElementById("countLabel");
+  var pill = document.querySelector("#status span");
+  var items = document.querySelectorAll(".item");
+
+  function tick() {
+    var now = new Date();
+    if (START) {
+      var s = new Date(START), mins = (now - s) / 60000;
+      items.forEach(function (el) { el.classList.toggle("now", mins >= +el.dataset.from && mins < +el.dataset.to); });
+      if (mins < 0) {
+        var m = Math.ceil(-mins), d = Math.floor(m / 1440), h = Math.floor((m % 1440) / 60), r = m % 60;
+        cd.textContent = d > 0 ? d + "d " + h + "h" : h + "h " + r + "m";
+      } else if (mins < 45) {
+        lbl.textContent = "Live now"; cd.textContent = "Minute " + Math.floor(mins); pill.textContent = "Live now";
+      } else {
+        lbl.textContent = "Status"; cd.textContent = "Ended"; pill.textContent = "Recording follows";
+      }
+      return;
+    }
+    var today = new Date(now.toDateString());
+    var days = Math.round((new Date(DAY.toDateString()) - today) / 86400000);
+    if (days > 1) cd.textContent = days + " days";
+    else if (days === 1) cd.textContent = "Tomorrow";
+    else if (days === 0) { lbl.textContent = "Status"; cd.textContent = "Today"; }
+    else { lbl.textContent = "Status"; cd.textContent = "Ended"; pill.textContent = "Next: 16 Dec 2026"; }
+  }
+  tick(); setInterval(tick, 30000);
+  var lb = document.getElementById("lightbox"), last = null;
+  function closeLb() { lb.hidden = true; if (last) last.focus(); }
+  document.querySelectorAll(".zoom").forEach(function (zb) {
+    zb.addEventListener("click", function () { last = zb; lb.innerHTML = ""; var i = zb.querySelector("img").cloneNode(); i.removeAttribute("loading"); lb.appendChild(i); lb.hidden = false; });
+  });
+  lb.addEventListener("click", closeLb);
+  document.addEventListener("keydown", function (e) { if (e.key === "Escape" && !lb.hidden) closeLb(); });
+})();
+</script>
+
+</body></html>
