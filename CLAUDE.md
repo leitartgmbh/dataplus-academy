@@ -87,7 +87,7 @@ Christof Schwarz (Moderator), Ahmad Abou Ezzah (Data+ Specialist), Leon Schmidt 
 |---|---|---|---|---|
 | 0:00 | 3 | Welcome | (frame) | Topics, how to send questions |
 | 0:03 | 12 | New in the kitchen | Product news | Three cards, in this order: Hello Data+ publish objects to origin sheet (`hello-dataplus-publish.webp`), Data+ Cloud Admin Console (`cloud-admin-console.webp`, CTA "Become an early tester" → https://waitlist.leitart.de, Tenant Cleanup sheet), "Still working on …" list: Data Quality extension, Data Lineage, Language Switcher, 3D Models, Landing Page (Data+ Hub). The Data Quality screenshot moved to event #2 (2026-11-18). |
-| 0:15 | 12 | Financial Planning with the help of Claude | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
+| 0:15 | 12 | Financial Planning with MCP (renamed 2026-11-18, was "with the help of Claude") | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
 | 0:27 | 10 | Data+ Flow | Example: Shopfloor App | Data+ Flow demonstrated on the example of the Shopfloor App (renamed 2026-11-18, was "Shopfloor App under the hood" / Data+ Forms) |
 | 0:37 | 8 | Q&A | (frame) | Live questions |
 | — | — | Wrap-up (chip 6, `#next`) | — | Save the date for session 2 + "How to engage": Save your seat (HubSpot form for Office Hours 02 · 16 Dec 2026, also as QR code), dataplusextension.com, wiki.leitart.de, leitart.de, YouTube @Leitart. QR is drawn in the page with qrcode-generator 1.4.4 from cdnjs (no QR if offline; the link still works). |
@@ -124,6 +124,17 @@ header, chip row + proportional agenda bar, then a stage showing one view at a t
 Overview (key `0`) → one view per block (`1`–`9`) → Save the date. `←` `→` step, `F` full
 screen, `T` theme. The view id is kept in the hash (`#b3`, `#next`) so a reload stays put.
 Phones and very short windows fall back to normal scrolling.
+
+**Qlik viewer (2026-11-18):** opens over the stage only; header, chip row and agenda bar stay
+unchanged. The viewer has **no bar of its own**: while a sheet is open, a close button (X,
+or `Esc`) and, for blocks with prompts, the prompts button appear in the chip row next to the
+full-screen button. "Open in Qlik" sits in the loading/blank state of the viewer. No sheet tabs
+(Qlik's own sheet navigation is used). **No footer and no ←/→ buttons** (keys only), for
+more room. Any navigation (chips, arrows, keys) closes it; the iframes
+stay loaded. **Live marker:** a vertical marker moves along the agenda bar (updated every
+second, animated) while the session runs, hidden before and after. Test it with
+`?startsat=2026-11-18T15:30:00` (ISO; without offset = local time), which replaces the
+session start for countdown, live minute and marker.
 
 **Theme switcher (2026-11-18):** sun/moon button in the header (and `T`), choice stored in
 `localStorage` (`academy-theme`). **Dark is the default for everyone** (the system
@@ -199,7 +210,7 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
   `https://<uuid>.frame.claudeusercontent.com` inside `https://claude.ai`, and its own CSP
   blocks the Qlik iframe with `frame-src`. No Qlik tenant CSP entry can fix that.
 - **Qlik targets per block:**
-  - Financial Planning with Claude → MCP Planning 2.0, **all 5 sheets** as separate links
+  - Financial Planning with MCP → MCP Planning 2.0, **all 5 sheets** as separate links
     (Home, Scenario Management, Planning, Analysis, Agent Log), plus a **copy-ready Claude
     prompt panel** (prompts from `../customer-mashups/pages/qlik-data-in-action.js`
     `promptPanel` and `warsaw-cfo.prompts.js`).

@@ -72,6 +72,13 @@
     location.protocol === "https:" && ((A.embed && A.embed.origins) || []).indexOf(location.origin) >= 0;
   var cropTop = (A.embed && A.embed.cropTop != null) ? A.embed.cropTop : 48;
 
+  // ?startsat=2026-11-18T15:30:00 (ISO; without offset = local time) replaces the start of the
+  // shown session, to test the countdown, live minute and the moving marker
+  var startsAt = (function () {
+    var v = new URLSearchParams(location.search).get("startsat");
+    return v && !isNaN(Date.parse(v)) ? v : null;
+  })();
+
   /* ---------- state ---------- */
   var S = null;            // current session
   var views = [];          // { id, kind: "overview" | "block" | "next", label, n, t, color, block, session }
@@ -275,6 +282,7 @@
   /* ---------- render ---------- */
   function render() {
     S = pickSession();
+    if (S && startsAt) S.start = startsAt;
     targets = []; promptSets = []; promptMap = new Map();
     slots.forEach(function (e) { e.slot.remove(); }); slots.clear();
     if (!S) { main.innerHTML = '<div class="wrap"><p>No session in the content file yet.</p></div>'; return; }
@@ -315,13 +323,9 @@
     $("#bar").innerHTML = S.blocks.map(function (b, i) {
       return '<button type="button" class="' + (b.frame ? "frame" : "") + '" style="--m:' + b.minutes + ";--seg:" + colorVar(blockColor(b)) +
         '" data-view="' + (i + 1) + '" aria-label="' + esc(offset(b.from) + " " + b.title) + '" tabindex="-1"></button>';
-    }).join("") + '<span class="needle" id="needle" hidden></span>';
+    }).join("") + '<span class="elapsed" id="elapsed" hidden></span><span class="needle" id="needle" hidden></span>';
     $("#walk").hidden = false;
 
-    $("#viewerChips").innerHTML = targets.map(function (t, k) {
-      return '<li><button type="button" class="chip" data-vq="' + k + '" style="--cc:' + colorVar(blockColor(S.blocks[t.block])) + '" aria-current="false" title="' +
-        esc(S.blocks[t.block].title) + (k < 9 ? " · key " + (k + 1) : "") + '"><span class="n">' + (k + 1) + "</span>" + esc(t.label) + "</button></li>";
-    }).join("");
 
     // start view: from the hash (#b3, #next), else the live block, else the overview
     var fromHash = indexOfView(hashId());
@@ -340,6 +344,7 @@
     if (!views.length) return;
     k = Math.max(0, Math.min(views.length - 1, k));
     var changed = k !== current;
+    if (!opts.keepViewer) closeViewer();
     current = k;
     $$(".view", main).forEach(function (el, i) {
       var on = i === k;
@@ -357,8 +362,6 @@
     });
     var v = views[k];
     $$("#bar button").forEach(function (b, i) { b.classList.toggle("is-active", v.kind === "block" && v.block === i); });
-    $("#prevBtn").disabled = k === 0;
-    $("#nextBtn").disabled = k === views.length - 1;
     if (!opts.keepHash) {
       var id = k === 0 ? "" : v.id;
       var base = location.pathname + location.search;
@@ -431,30 +434,45 @@
     $$("[data-now]").forEach(function (el) { el.hidden = Number(el.dataset.now) !== live; });
     $$("#chips .chip").forEach(function (c, k) { c.classList.toggle("is-now", views[k].kind === "block" && views[k].block === live); });
 
-    var needle = $("#needle");
-    if (needle) {
-      if (live >= 0) {
-        var seg = $$("#bar button")[live], b = S.blocks[live];
-        needle.style.left = (seg.offsetLeft + ((mins - b.from) / b.minutes) * seg.offsetWidth) + "px";
-        needle.hidden = false;
-      } else needle.hidden = true;
+    placeNeedle(mins);
+  }
+
+  // marker on the agenda bar: only while the session runs (0 … duration minutes)
+  function placeNeedle(mins) {
+    var needle = $("#needle"), elapsed = $("#elapsed");
+    if (!needle) return;
+    var segs = $$("#bar button"), x = -1;
+    if (mins != null && mins >= 0 && mins < (S.duration || 0)) {
+      S.blocks.forEach(function (b, i) {
+        if (mins >= b.from && mins < b.from + b.minutes && segs[i]) x = segs[i].offsetLeft + ((mins - b.from) / b.minutes) * segs[i].offsetWidth;
+      });
     }
+    if (x < 0) { needle.hidden = true; elapsed.hidden = true; return; }
+    var first = needle.hidden;
+    if (first) { needle.style.transition = "none"; elapsed.style.transition = "none"; }
+    needle.style.left = x + "px";
+    elapsed.style.width = x + "px";
+    needle.hidden = false; elapsed.hidden = false;
+    if (first) { void needle.offsetWidth; needle.style.transition = ""; elapsed.style.transition = ""; }
   }
 
   /* ---------- Qlik viewer ---------- */
   var viewer = $("#viewer"), vBody = $("#viewerBody"), vPrompts = $("#viewerPrompts"), promptBtn = $("#promptBtn");
   var slots = new Map(), currentQ = -1, promptsOpen = false, lastOpener = null;
 
+  function viewerOpen() { return !viewer.hidden; }
   function openViewer(k, opener) {
     var t = targets[k];
     if (!t) return;
     if (opener) lastOpener = opener;
     currentQ = k;
-    $("#viewerNum").textContent = (k + 1) + "/" + targets.length;
-    $("#viewerTitle").textContent = t.label;
-    $("#viewerHint").textContent = S.blocks[t.block].title;
+    // the stage behind shows the block this sheet belongs to; header and chip row stay as they are
+    if (!(views[current].kind === "block" && views[current].block === t.block)) go(t.block + 1, { instant: true, keepViewer: true });
+    // no sheet tabs here: inside Qlik the sheet navigation does that job
     $("#viewerExternal").href = t.url;
-    $$("#viewerChips .chip").forEach(function (c, i) { c.setAttribute("aria-current", String(i === k)); });
+    viewer.setAttribute("aria-label", "Qlik sheet: " + t.label);
+    // scrolling layout (phones): the viewer is fixed, so it starts below the chip row
+    viewer.style.top = getComputedStyle(viewer).position === "fixed" ? Math.max(0, $("#walk").getBoundingClientRect().bottom) + "px" : "";
 
     if (!slots.has(k)) {
       var frame = document.createElement("iframe");
@@ -476,8 +494,8 @@
 
     promptBtn.hidden = t.prompts < 0;
     renderViewerPrompts();
-    if (!viewer.open) viewer.showModal();
-    if (!(views[current].kind === "block" && views[current].block === t.block)) go(t.block + 1, { instant: true });
+    viewer.hidden = false;
+    $("#viewerClose").hidden = false;
   }
   function renderViewerPrompts() {
     var t = targets[currentQ];
@@ -488,23 +506,20 @@
     vPrompts.hidden = !show;
     if (show) vPrompts.innerHTML = promptsHtml(promptSets[t.prompts]);
   }
-  function stepViewer(dir) {
-    var n = currentQ + dir;
-    if (n >= 0 && n < targets.length) openViewer(n);
+  function closeViewer() {
+    if (!viewer || viewer.hidden) return;
+    viewer.hidden = true;
+    $("#viewerClose").hidden = true;
+    promptBtn.hidden = true;
+    if (lastOpener && document.contains(lastOpener)) lastOpener.focus({ preventScroll: true });
   }
-  function closeViewer() { if (viewer.open) viewer.close(); }
 
   promptBtn.addEventListener("click", function () { promptsOpen = !promptsOpen; renderViewerPrompts(); });
   $("#viewerClose").addEventListener("click", closeViewer);
-  $("#viewerFs").addEventListener("click", toggleFullscreen);
-  viewer.addEventListener("click", function (e) { if (e.target === viewer) closeViewer(); });
-  viewer.addEventListener("close", function () {
-    if (lastOpener && document.contains(lastOpener)) lastOpener.focus({ preventScroll: true });
-  });
 
   /* ---------- fullscreen ---------- */
   var fsSupported = !!document.documentElement.requestFullscreen;
-  if (!fsSupported) { $("#fsBtn").hidden = true; $("#viewerFs").hidden = true; }
+  if (!fsSupported) { $("#fsBtn").hidden = true; }
   function toggleFullscreen() {
     if (!fsSupported) return;
     if (document.fullscreenElement) document.exitFullscreen().catch(function () {});
@@ -513,7 +528,7 @@
   $("#fsBtn").addEventListener("click", toggleFullscreen);
   document.addEventListener("fullscreenchange", function () {
     var on = !!document.fullscreenElement;
-    ["#fsBtn", "#viewerFs"].forEach(function (id) {
+    ["#fsBtn"].forEach(function (id) {
       var b = $(id);
       b.setAttribute("aria-pressed", String(on));
       b.title = (on ? "Exit full screen" : "Full screen") + " (F)";
@@ -541,8 +556,6 @@
   themeBtn.addEventListener("click", toggleTheme);
   syncThemeBtn();
 
-  $("#prevBtn").addEventListener("click", function () { go(current - 1); });
-  $("#nextBtn").addEventListener("click", function () { go(current + 1); });
 
   /* ---------- copy, toast, lightbox ---------- */
   function copyText(text) {
@@ -550,7 +563,7 @@
     return new Promise(function (resolve, reject) {
       var ta = document.createElement("textarea");
       ta.value = text; ta.setAttribute("readonly", ""); ta.style.position = "fixed"; ta.style.opacity = "0";
-      (viewer.open ? viewer : document.body).appendChild(ta); ta.select();
+      document.body.appendChild(ta); ta.select();
       var ok = false; try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
       ta.remove(); if (ok) resolve(); else reject(new Error("copy failed"));
     });
@@ -604,13 +617,8 @@
 
     if (!lb.hidden) { if (key === "Escape") { e.preventDefault(); closeLightbox(); } return; }
 
-    if (viewer.open) {
-      if (key === "ArrowRight") { e.preventDefault(); stepViewer(1); }
-      else if (key === "ArrowLeft") { e.preventDefault(); stepViewer(-1); }
-      else if (/^[1-9]$/.test(key) && Number(key) <= targets.length) { e.preventDefault(); openViewer(Number(key) - 1); }
-      else if (key === "f" || key === "F") { e.preventDefault(); toggleFullscreen(); }
-      return; // Esc: the dialog closes itself
-    }
+    if (viewerOpen() && key === "Escape") { e.preventDefault(); closeViewer(); return; }
+    // all other keys work as without the viewer (navigating closes it)
 
     if (!S) return;
     if (/^[0-9]$/.test(key) && Number(key) < views.length) { e.preventDefault(); go(Number(key)); }
@@ -622,15 +630,6 @@
     else if (key === "t" || key === "T") { e.preventDefault(); toggleTheme(); }
   });
 
-  /* ---------- footer ---------- */
-  var F = A.footer || {};
-  $("#footer").innerHTML = "<span>" + esc(F.left || "") + "</span>" +
-    '<nav aria-label="Footer"><span class="keys"><kbd>0</kbd>–<kbd>9</kbd> jump · <kbd>←</kbd><kbd>→</kbd> step · <kbd>F</kbd> full screen · <kbd>T</kbd> theme' +
-    (canEmbed ? " · <kbd>Esc</kbd> close sheet" : "") + "</span>" +
-    (F.links || []).map(function (l) {
-      return '<a href="' + esc(l.url) + '" target="_blank" rel="noopener">' + esc(l.label) + "</a>";
-    }).join("") + "</nav>";
-
   window.addEventListener("hashchange", function () {
     var id = hashId();
     if (editions.some(function (s) { return s.id === id; }) && (!S || S.id !== id)) { closeViewer(); render(); return; }
@@ -640,5 +639,5 @@
   window.addEventListener("resize", tick);
 
   render();
-  setInterval(tick, 15000);
+  setInterval(tick, 1000);   // countdown, live minute and the moving marker
 })();

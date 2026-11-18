@@ -60,7 +60,7 @@
         eyebrow: "November edition",
         title: "What's cooking in",
         titleAccent: "Data+",
-        lead: "45 minutes on what's new across the Data Plus Extension family: planning with Claude, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
+        lead: "45 minutes on what's new across the Data Plus Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
         date: "2026-11-24",
         start: "2026-11-24T16:00:00+01:00",
         duration: 45,
@@ -153,8 +153,8 @@
           {
             from: 15, minutes: 12,
             tag: { label: "AI in practice", color: "c2" },
-            title: "Financial Planning with the help of Claude",
-            chip: "Planning with Claude",
+            title: "Financial Planning with MCP",
+            chip: "Planning with MCP",
             text: "How Claude supports budgeting and forecasting on top of Qlik apps with Data+ writeback. Claude works on the MCP Planning app; every step it takes lands in the Agent Log.",
             links: [
               { kind: "qlik", label: "Home", url: sheet(PLANNING, "hKMaP"), hint: "Start page" },
