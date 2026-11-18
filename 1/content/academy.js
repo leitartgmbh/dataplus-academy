@@ -11,6 +11,8 @@
      duration   minutes
      recording  URL once the recording exists, else null
      url        optional page for a later edition (e.g. "../2/"), linked from "Save the date"
+     engage     { title, links, teaser } for the wrap-up view; a link with qr: true also gets
+                a QR code; teaser = { img, width, height, alt, text, url? } shown on the right
      presenters ids from ../assets/people.js, or { id, role } with a session role
      blocks     the agenda (sessions without blocks are shown as "Save the date")
 
@@ -22,7 +24,7 @@
      tag             { label, color: "c1" | "c2" | "c3" | "gold" }
      figures         screenshots: { src, width, height, alt, title, text, tag, links }
                      or a text card: { kind: "list", title, tag, items: [{ title, text }] }
-     links           { kind: "qlik" | "link", label, url, hint }
+     links           { kind: "qlik" | "link" | "mail", label, url, hint }
                        qlik → full-screen modal where embedding works, else new tab
                        link → new tab
      prompts         { title, note, items: [{ title, text }] }  copy-ready prompts
@@ -37,6 +39,8 @@
   var PLANNING = "5a9e541f-195f-4119-a331-5b302a5dd773";
   var WAITLIST = "https://waitlist.leitart.de";
   var DOCS = "https://wiki.leitart.de/";
+  var MAIL = { kind: "mail", label: "christof.schwarz@leitart.de", url: "mailto:christof.schwarz@leitart.de", hint: "For more questions" };
+  var SEAT_2 = "https://2d9kdh.share-eu1.hsforms.com/2MrnxkMtWTuGnnBCw-fAAqw?session=Office%20Hours%2002%20%C2%B7%2016%20Dec%202026";
 
   window.ACADEMY = {
     name: "Data+ Academy",
@@ -53,7 +57,7 @@
     sessions: [
       {
         id: "2026-11",
-        eyebrow: "Data+ Webinar · November edition",
+        eyebrow: "November edition",
         title: "What's cooking in",
         titleAccent: "Data+",
         lead: "45 minutes on what's new across the Data Plus Extension family: planning with Claude, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
@@ -69,6 +73,24 @@
           "ahmad-abou-ezzah",
           "leon-schmidt"
         ],
+
+        /* shown on the wrap-up view (last chip); qr: true adds a QR code for that link */
+        engage: {
+          title: "How to engage",
+          links: [
+            { kind: "link", label: "Save your seat", url: SEAT_2, hint: "Session 2 · 16 Dec 2026", primary: true, qr: true },
+            { kind: "link", label: "More info", url: "https://www.dataplusextension.com", hint: "www.dataplusextension.com" },
+            { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" },
+            { kind: "link", label: "Leitart", url: "https://www.leitart.de", hint: "www.leitart.de" },
+            { kind: "link", label: "YouTube", url: "https://www.youtube.com/@Leitart", hint: "@Leitart", icon: "play" },
+            MAIL
+          ],
+          teaser: {
+            img: "media/advent-calendar.png", width: 294, height: 198,
+            alt: "Advent calendar with 24 doors under a golden star, the last door slightly open",
+            text: "Watch for the Data+ Qlik Advent Calendar on LinkedIn soon …"
+          }
+        },
 
         audience: {
           title: "For people who want to know why it works, not only that it works",
@@ -175,7 +197,9 @@
             title: "Q&A",
             text: "Your questions, answered live.",
             links: [
-              { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" }
+              { kind: "link", label: "Data+ documentation", url: DOCS, hint: "wiki.leitart.de" },
+              { kind: "link", label: "More info", url: "https://www.dataplusextension.com", hint: "www.dataplusextension.com" },
+              MAIL
             ]
           }
         ]
@@ -185,7 +209,7 @@
         id: "2026-12",
         title: "Next session",
         date: "2026-12-16",
-        start: null,
+        start: "2026-12-16T16:00:00+01:00",
         url: "../2/", urlLabel: "Data+ Academy #2",
         text: "Our December edition goes deep on one product and adds help for Qlik Cloud admins.",
         teasers: [

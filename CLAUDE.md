@@ -90,8 +90,9 @@ Christof Schwarz (Moderator), Ahmad Abou Ezzah (Data+ Specialist), Leon Schmidt 
 | 0:15 | 12 | Financial Planning with the help of Claude | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
 | 0:27 | 10 | Data+ Flow | Example: Shopfloor App | Data+ Flow demonstrated on the example of the Shopfloor App (renamed 2026-11-18, was "Shopfloor App under the hood" / Data+ Forms) |
 | 0:37 | 8 | Q&A | (frame) | Live questions |
+| — | — | Wrap-up (chip 6, `#next`) | — | Save the date for session 2 + "How to engage": Save your seat (HubSpot form for Office Hours 02 · 16 Dec 2026, also as QR code), dataplusextension.com, wiki.leitart.de, leitart.de, YouTube @Leitart. QR is drawn in the page with qrcode-generator 1.4.4 from cdnjs (no QR if offline; the link still works). |
 
-**Session 2 — Wed 16 Dec 2026 (save the date).** Teasers: Data+ Table in depth (writeback
+**Session 2 — Wed 16 Dec 2026, 16:00 CET (save the date).** Teasers: Data+ Table in depth (writeback
 table), New Qlik Cloud Admin support (Cloud Admin Console incl. tenant cleanup, early testers
 via waitlist.leitart.de), Surprise topic.
 
@@ -125,7 +126,8 @@ screen, `T` theme. The view id is kept in the hash (`#b3`, `#next`) so a reload 
 Phones and very short windows fall back to normal scrolling.
 
 **Theme switcher (2026-11-18):** sun/moon button in the header (and `T`), choice stored in
-`localStorage` (`academy-theme`), otherwise the system setting. **Dark uses the leitart.de
+`localStorage` (`academy-theme`). **Dark is the default for everyone** (the system
+light/dark setting is ignored since 2026-11-18); light only after the switcher. **Dark uses the leitart.de
 colours** (from www.leitart.de/leitart.css): ink `#2e353a` (bg), ink-2 `#3a4248` (surface),
 `#23282c` (deep), fischerblau `#4ca0aa` (accent, c1), sonnengelb `#fabb00` (c2, focus ring),
 kupferrot `#e64435` (c3), white text. Light keeps the Data+ webinar tokens below. The slate

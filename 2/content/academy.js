@@ -24,7 +24,7 @@
         titleAccent: "#2",
         lead: "",
         date: "2026-12-16",
-        start: null,
+        start: "2026-12-16T16:00:00+01:00",
         duration: 45,
         language: "English",
         recording: null,

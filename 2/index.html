@@ -26,13 +26,6 @@
       --logo-dark: block; --logo-light: none;
       color-scheme: dark;
     }
-    @media (prefers-color-scheme: light) {
-      :root:not([data-theme="dark"]) {
-        --bg: #F2F5F5; --surface: #FFFFFF; --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
-        --line: rgba(59, 68, 73, .16); --accent: #266874; --gold: #B3524B; --focus: #266874;
-        --logo-dark: none; --logo-light: block; color-scheme: light;
-      }
-    }
     :root[data-theme="light"] {
       --bg: #F2F5F5; --surface: #FFFFFF; --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
       --line: rgba(59, 68, 73, .16); --accent: #266874; --gold: #B3524B; --focus: #266874;
@@ -85,7 +78,7 @@
     <main>
       <div class="eyebrow">Data+ Academy #2</div>
       <h1>Coming <span>soon…</span></h1>
-      <div class="date">Wednesday, 16 December 2026<small>The agenda follows here.</small></div>
+      <div class="date">Wednesday, 16 December 2026 · 16:00 CET<small>The agenda follows here.</small></div>
       <a class="back" href="../1/">Data+ Academy #1 <small>What's cooking in Data+ · 24 Nov 2026</small></a>
     </main>
 
@@ -96,7 +89,7 @@
       var root = document.documentElement;
       function current() {
         var t = root.dataset.theme;
-        return t === "light" || t === "dark" ? t : (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark");
+        return t === "light" ? "light" : "dark";
       }
       function toggle() {
         var next = current() === "dark" ? "light" : "dark";

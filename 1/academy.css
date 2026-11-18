@@ -37,17 +37,7 @@
   --ease: cubic-bezier(.2, .8, .2, 1);
   color-scheme: dark;
 }
-@media (prefers-color-scheme: light) {
-  :root:not([data-theme="dark"]) {
-    --bg: #F2F5F5; --bg-deep: #E2EAEC; --surface: #FFFFFF;
-    --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
-    --line: rgba(59, 68, 73, .16); --accent: #266874; --accent-ink: #FFFFFF;
-    --c1: #266874; --c2: #ECBF3E; --c3: #B3524B; --gold: #B3524B; --frame: #B1B5B4;
-    --focus: #266874; --shade: rgba(14, 18, 20, .92);
-    --logo-dark: none; --logo-light: block;
-    color-scheme: light;
-  }
-}
+/* Dark is the default for everyone; light only after the switcher sets data-theme="light". */
 :root[data-theme="light"] {
   --bg: #F2F5F5; --bg-deep: #E2EAEC; --surface: #FFFFFF;
   --fg: #3B4449; --fg-strong: #232A2D; --muted: #5F666A;
@@ -190,6 +180,8 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
 .avatar img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
 .pname { font-weight: 600; font-size: 18px; color: var(--fg-strong); line-height: 1.3; }
 .ptitle { font-size: 14px; color: var(--muted); }
+.pmail { font-size: 14px; color: var(--accent); text-decoration: none; overflow-wrap: anywhere; }
+.pmail:hover { text-decoration: underline; }
 .prole { margin-top: 4px; font-size: 12px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); }
 .bv.solo { justify-content: center; }
 .bv.solo .bv-text h2 { font-size: clamp(36px, 5vw, 64px); }
@@ -207,7 +199,7 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
 .qlink .ico svg { width: 16px; height: 16px; }
 .qlink .lbl { display: grid; line-height: 1.25; min-width: 0; }
 .qlink .lbl b { font-weight: 600; font-size: 15px; }
-.qlink .lbl small { font-size: 12px; color: var(--muted); }
+.qlink .lbl small { font-size: 12px; color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .qlink.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
 .qlink.primary .ico { background: color-mix(in srgb, var(--accent-ink) 15%, transparent); color: var(--accent-ink); }
 .qlink.primary .lbl small { color: color-mix(in srgb, var(--accent-ink) 75%, transparent); }
@@ -249,7 +241,21 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
 .prompt.is-copied .cp { color: var(--accent); }
 
 /* save the date */
-.nx { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 48px; align-items: center; }
+.nx { flex: 1 1 auto; display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); grid-template-rows: minmax(0, 1fr) auto; gap: 20px 48px; align-items: center; }
+.nx.only-engage { grid-template-columns: 1fr; grid-template-rows: auto; align-content: center; }
+.nx .teasers { gap: 10px; }
+.nx .teaser { padding: 14px 20px; }
+.nx .teaser p { font-size: 14px; margin-top: 4px; }
+.nx-engage { grid-column: 1 / -1; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 28px; align-items: center; padding-top: 18px; border-top: 1px solid var(--line); }
+.nx-engage:has(.engage-teaser) { grid-template-columns: auto minmax(0, 1fr) minmax(170px, 250px); }
+.engage-main { min-width: 0; display: grid; gap: 12px; }
+.engage-teaser { display: grid; gap: 8px; align-self: center; min-width: 0; text-decoration: none; color: var(--fg-strong); }
+.engage-teaser img { display: block; width: 100%; height: auto; max-height: 17vh; object-fit: cover; object-position: center top; border-radius: 22px 0 22px 8px; box-shadow: 0 0 0 1px var(--line); }
+.engage-teaser span { font-size: 13px; font-weight: 600; line-height: 1.35; }
+.engage-main .links.grid { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+.qr { display: grid; justify-items: center; gap: 8px; text-decoration: none; color: var(--fg-strong); font-size: 12px; font-weight: 600; }
+.qr svg { display: block; width: clamp(110px, 17vh, 168px); height: auto; border-radius: 14px 0 14px 5px; }
+.qr:hover svg { outline: 2px solid var(--accent); outline-offset: 3px; }
 .nx h2 { font-size: clamp(32px, 4.4vw, 56px); margin-top: 10px; }
 .nx .date { font-weight: 600; font-size: 22px; color: var(--accent); margin-top: 14px; }
 .nx p { max-width: 46ch; margin-top: 14px; }
@@ -319,6 +325,20 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
   .feature .qlink .lbl small { display: none; }
   .feature .qlink { padding: 5px 12px 5px 6px; }
   .bv-text > p { max-width: 90ch; }
+  .view { padding-block: 14px 12px; }
+  .nx { gap: 14px 40px; }
+  .nx h2 { font-size: 40px; }
+  .nx .date { font-size: 18px; margin-top: 8px; }
+  .nx p { margin-top: 8px; font-size: 15px; }
+  .nx .teaser { padding: 10px 16px; }
+  .nx .teaser h3 { font-size: 16px; }
+  .nx .teaser p { font-size: 13px; }
+  .nx-engage { padding-top: 12px; gap: 22px; }
+  .engage-main { gap: 8px; }
+  .engage-main .qlink { padding: 6px 12px 6px 8px; }
+  .engage-main .qlink .ico { width: 26px; height: 26px; }
+  .qr svg { width: 15vh; }
+  .engage-teaser img { max-height: 14vh; }
   .bv .prompt .txt { font-size: 13px; }
   .bv-text h2 { font-size: clamp(24px, 2.8vw, 34px); }
 }
@@ -340,6 +360,8 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
   .zoom { flex: none; }
   .zoom img { height: auto; }
   .nx { grid-template-columns: 1fr; gap: 24px; }
+  .nx-engage, .nx-engage:has(.engage-teaser) { grid-template-columns: 1fr; justify-items: start; }
+  .engage-teaser { max-width: 320px; }
   .links { flex-direction: column; align-items: stretch; }
   .foot-row .keys { display: none; }
 }

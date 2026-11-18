@@ -28,7 +28,8 @@
     qlik: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg>',
     link: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg>',
     play: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg>',
-    chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"/></svg>'
+    chat: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"/></svg>',
+    mail: '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18v12H3zM3 7l9 6 9-6"/></svg>'
   };
   var COLORS = { c1: 1, c2: 1, c3: 1, gold: 1, frame: 1, accent: 1 };
   function colorVar(c) { return "var(--" + (COLORS[c] ? c : "c1") + ")"; }
@@ -93,8 +94,9 @@
     } else if (!hint) {
       try { hint = new URL(l.url).hostname.replace(/^www\./, ""); } catch (e) { hint = ""; }
     }
-    var icon = isQlik ? ICON.qlik : l.kind === "recording" ? ICON.play : ICON.link;
-    return '<a class="qlink' + (l.primary ? " primary" : "") + '" href="' + esc(l.url) + '" target="_blank" rel="noopener"' + q +
+    var isMail = l.kind === "mail" || /^mailto:/.test(l.url);
+    var icon = isQlik ? ICON.qlik : (l.icon && ICON[l.icon]) || (isMail ? ICON.mail : l.kind === "recording" ? ICON.play : ICON.link);
+    return '<a class="qlink' + (l.primary ? " primary" : "") + '" href="' + esc(l.url) + '"' + (isMail ? "" : ' target="_blank" rel="noopener"') + q +
       (isQlik ? ' title="' + esc(canEmbed ? "Opens full screen. Ctrl/Cmd-click for a new tab." : "Opens in Qlik (login required)") + '"' : "") + ">" +
       '<span class="ico">' + icon + '</span><span class="lbl"><b>' + esc(l.label) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : "") + "</span></a>";
   }
@@ -195,7 +197,8 @@
       return '<div class="person"><span class="avatar" aria-hidden="true"><span class="ini">' + esc(initials(p.name)) + "</span>" +
         (p.photo ? '<img src="' + esc(p.photo) + '" alt="">' : "") + "</span>" +
         '<div class="pname">' + esc(p.name) + "</div>" + (p.title ? '<div class="ptitle">' + esc(p.title) + "</div>" : "") +
-        (p.role ? '<div class="prole">' + esc(p.role) + "</div>" : "") + "</div>";
+        (p.role ? '<div class="prole">' + esc(p.role) + "</div>" : "") +
+        (p.email ? '<a class="pmail" href="mailto:' + esc(p.email) + '">' + esc(p.email) + "</a>" : "") + "</div>";
     }).join("") + "</div>";
   }
 
@@ -225,7 +228,38 @@
       body + (b.audience ? audienceHtml() : "") + "</div>";
   }
 
+  // QR code as inline SVG (qrcode-generator from cdnjs); empty if the library did not load
+  function qrSvg(text) {
+    if (typeof window.qrcode !== "function") return "";
+    try {
+      var q = window.qrcode(0, "M"); q.addData(text); q.make();
+      var n = q.getModuleCount(), d = "";
+      for (var r = 0; r < n; r++) for (var c = 0; c < n; c++) if (q.isDark(r, c)) d += "M" + c + " " + r + "h1v1h-1z";
+      return '<svg viewBox="-2 -2 ' + (n + 4) + " " + (n + 4) + '" shape-rendering="crispEdges" aria-hidden="true"><rect x="-2" y="-2" width="' + (n + 4) + '" height="' + (n + 4) + '" fill="#fff"/><path d="' + d + '" fill="#000"/></svg>';
+    } catch (e) { return ""; }
+  }
+  function engageHtml() {
+    var E = S.engage;
+    if (!E || !(E.links || []).length) return "";
+    var qrLink = E.links.filter(function (l) { return l.qr; })[0];
+    var qr = qrLink ? qrSvg(qrLink.url) : "";
+    return '<div class="nx-engage">' +
+      (qr ? '<a class="qr" href="' + esc(qrLink.url) + '" target="_blank" rel="noopener" aria-label="' + esc(qrLink.label) + ' (QR code)">' + qr +
+        "<span>Scan: " + esc(qrLink.label) + "</span></a>" : "") +
+      '<div class="engage-main"><div class="eyebrow">' + esc(E.title || "How to engage") + "</div>" +
+      (E.text ? "<p>" + esc(E.text) + "</p>" : "") +
+      '<div class="links grid">' + E.links.map(function (l) { return linkHtml(l, -1, {}); }).join("") + "</div></div>" +
+      (E.teaser ? teaserCardHtml(E.teaser) : "") + "</div>";
+  }
+  function teaserCardHtml(t) {
+    var inner = (t.img ? '<img src="' + esc(t.img) + '" alt="' + esc(t.alt || "") + '"' + (t.width ? ' width="' + t.width + '" height="' + t.height + '"' : "") + ">" : "") +
+      (t.text ? "<span>" + esc(t.text) + "</span>" : "");
+    return t.url ? '<a class="engage-teaser" href="' + esc(t.url) + '" target="_blank" rel="noopener">' + inner + "</a>"
+                 : '<div class="engage-teaser">' + inner + "</div>";
+  }
+
   function nextHtml(s) {
+    if (!s) return '<div class="nx only-engage">' + engageHtml() + "</div>";
     var hasAgenda = s.blocks && s.blocks.length;
     return '<div class="nx"><div>' +
       '<div class="eyebrow">Save the date</div><h2>' + esc(fullTitle(s)) + "</h2>" +
@@ -235,7 +269,7 @@
       '<div class="teasers">' + (s.teasers || []).map(function (t) {
         return '<div class="teaser' + (t.surprise ? " surprise" : "") + '"><h3>' + esc(t.title) + "</h3><p>" + esc(t.text) +
           (t.link ? ' <a href="' + esc(t.link.url) + '" target="_blank" rel="noopener">' + esc(t.link.label) + "</a>" : "") + "</p></div>";
-      }).join("") + "</div></div>";
+      }).join("") + "</div>" + engageHtml() + "</div>";
   }
 
   /* ---------- render ---------- */
@@ -251,11 +285,11 @@
 
     views = [{ id: "overview", kind: "overview", label: "Overview", n: "0", color: "accent" }]
       .concat(S.blocks.map(function (b, i) {
-        return { id: "b" + (i + 1), kind: "block", label: b.chip || b.title, n: String(i + 1), t: offset(b.from), color: blockColor(b), block: i };
+        return { id: "b" + (i + 1), kind: "block", label: b.chip || b.title, n: String(i + 1), color: blockColor(b), block: i };
       }))
-      .concat(upcoming.map(function (s, k) {
-        return { id: k ? "next-" + (k + 1) : "next", kind: "next", label: "Save the date", t: fmt({ day: "numeric", month: "short" }, dayOf(s)), color: "gold", session: s };
-      }));
+      .concat(upcoming.length ? upcoming.slice(0, 1).map(function (s) {
+        return { id: "next", kind: "next", label: "Wrap-up", n: String(S.blocks.length + 1), color: "gold", session: s };
+      }) : S.engage ? [{ id: "next", kind: "next", label: "Wrap-up", n: String(S.blocks.length + 1), color: "gold", session: null }] : []);
 
     // blocks first, so Qlik targets are numbered in agenda order; overview needs targets.length
     var blockViews = S.blocks.map(function (b, i) { return blockHtml(b, i, t0); });
@@ -490,9 +524,8 @@
   /* ---------- theme switcher (dark = leitart.de colours) ---------- */
   var themeBtn = $("#themeBtn");
   function effectiveTheme() {
-    var t = document.documentElement.dataset.theme;
-    if (t === "light" || t === "dark") return t;
-    return window.matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+    // dark is the default; light only when chosen with the switcher
+    return document.documentElement.dataset.theme === "light" ? "light" : "dark";
   }
   function syncThemeBtn() {
     var other = effectiveTheme() === "dark" ? "light" : "dark";
@@ -506,7 +539,6 @@
     syncThemeBtn();
   }
   themeBtn.addEventListener("click", toggleTheme);
-  try { window.matchMedia("(prefers-color-scheme: light)").addEventListener("change", syncThemeBtn); } catch (e) { /* old Safari */ }
   syncThemeBtn();
 
   $("#prevBtn").addEventListener("click", function () { go(current - 1); });
@@ -581,7 +613,7 @@
     }
 
     if (!S) return;
-    if (/^[0-9]$/.test(key) && Number(key) <= S.blocks.length) { e.preventDefault(); go(Number(key)); }
+    if (/^[0-9]$/.test(key) && Number(key) < views.length) { e.preventDefault(); go(Number(key)); }
     else if (key === "ArrowRight" || key === "PageDown") { e.preventDefault(); go(current + 1); }
     else if (key === "ArrowLeft" || key === "PageUp") { e.preventDefault(); go(current - 1); }
     else if (key === "Home") { e.preventDefault(); go(0); }
