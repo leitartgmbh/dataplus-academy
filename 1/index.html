@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Data+ Academy</title>
+  <meta name="description" content="Agenda and link hub for the Data+ Academy webinars: every block links to its live Qlik sheet, screenshot, docs or recording.">
+  <script>
+    // /1 → /1/ : relative paths (academy.css, content/…) only resolve with the trailing slash.
+    // GitHub Pages redirects by itself; the local dev server (serve) does not.
+    if (!/\/$|\.html?$/.test(location.pathname)) location.replace(location.pathname + "/" + location.search + location.hash);
+  </script>
+  <link rel="icon" type="image/png" href="../assets/logos/logo-grau.png">
+  <script>
+    // theme switcher: explicit choice wins over the system setting (set before CSS paints)
+    try { var t = localStorage.getItem("academy-theme"); if (t === "light" || t === "dark") document.documentElement.dataset.theme = t; } catch (e) {}
+  </script>
+  <link rel="stylesheet" href="academy.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <div class="wrap top-row">
+        <a class="brand" href="./" aria-label="Data+ Academy home">
+          <img class="logo logo-on-dark" src="../assets/logos/logo-weiss.png" alt="data plus · a leitart solution" width="724" height="683">
+          <img class="logo logo-on-light" src="../assets/logos/logo-grau.png" alt="data plus · a leitart solution" width="724" height="683">
+          <span class="brand-name">Academy</span>
+        </a>
+        <div class="top-title" id="topTitle"></div>
+        <div class="live-pill" id="status" role="status"><i aria-hidden="true"></i><span>Data+ Academy</span></div>
+        <button type="button" class="icon-btn theme-btn" id="themeBtn" aria-label="Switch to light mode (T)" title="Switch to light mode (T)">
+          <svg class="sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+          <svg class="moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z"/></svg>
+        </button>
+      </div>
+    </header>
+
+    <nav class="walk" id="walk" aria-label="Walk-through" hidden>
+      <div class="wrap walk-row">
+        <button type="button" class="icon-btn" id="prevBtn" aria-label="Previous (←)" title="Previous (←)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+        </button>
+        <ol class="chips" id="chips"></ol>
+        <button type="button" class="icon-btn" id="nextBtn" aria-label="Next (→)" title="Next (→)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 5l7 7-7 7"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="fsBtn" aria-label="Full screen (F)" title="Full screen (F)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+      </div>
+      <div class="wrap"><div class="bar" id="bar"></div></div>
+    </nav>
+
+    <main class="stage" id="main">
+      <noscript><div class="wrap"><p>This page needs JavaScript to show the agenda.</p></div></noscript>
+    </main>
+
+    <footer class="foot"><div class="wrap foot-row" id="footer"></div></footer>
+  </div>
+
+  <!-- Qlik sheet viewer: one iframe per sheet, kept alive while switching -->
+  <dialog class="viewer" id="viewer" aria-labelledby="viewerTitle">
+    <div class="viewer-bar">
+      <div class="viewer-head">
+        <span class="viewer-num" id="viewerNum"></span>
+        <h2 id="viewerTitle"></h2>
+        <span class="viewer-hint" id="viewerHint"></span>
+      </div>
+      <ol class="chips viewer-chips" id="viewerChips" aria-label="Qlik sheets in this session"></ol>
+      <div class="viewer-actions">
+        <button type="button" class="icon-btn" id="promptBtn" aria-pressed="false" aria-label="Show prompts" title="Show prompts" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"/></svg>
+        </button>
+        <a class="btn-ghost" id="viewerExternal" href="#" target="_blank" rel="noopener">Open in Qlik
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg>
+        </a>
+        <button type="button" class="icon-btn" id="viewerFs" aria-label="Full screen (F)" title="Full screen (F)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+        </button>
+        <button type="button" class="icon-btn" id="viewerClose" aria-label="Close (Esc)" title="Close (Esc)">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="viewer-main">
+      <div class="viewer-body" id="viewerBody" data-state="loading">
+        <div class="viewer-state">
+          <p class="state-title">Loading the Qlik sheet …</p>
+          <p class="state-meta">It stays blank if you are not logged in to Qlik in this browser, or the browser blocks Qlik's cookies inside the page. Use <b>Open in Qlik</b> instead.</p>
+        </div>
+      </div>
+      <aside class="viewer-prompts" id="viewerPrompts" hidden></aside>
+    </div>
+  </dialog>
+
+  <div class="lightbox" id="lightbox" hidden></div>
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <script src="../assets/people.js"></script>
+  <script src="content/academy.js"></script>
+  <script src="academy.js"></script>
+</body>
+</html>

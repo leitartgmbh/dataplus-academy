@@ -49,31 +49,46 @@ tenant from `leitartgmbh.github.io` (needs the CSP entry below).
   (e.g. `content/academy.js`), the rendering code does not hard-code any session.
 - Language: English (UI and content).
 
-Suggested layout (adjust when building):
+Layout (since 2026-11-18): **one folder per academy event**, branched by copying the
+previous folder. Things shared by all events live in `assets/` at the root.
 
 ```
-index.html              the portal
-academy.css             styles (tokens below)
-academy.js              rendering, modal, keyboard, timing
-content/academy.js      sessions, blocks, links  ← the file to edit for new editions
-media/screenshots/      images used by blocks
-assets/logos/           logo-weiss.png (dark bg), logo-grau.png (light bg)
-assets/fonts/           Montserrat 400/600/700 woff2
-reference/              webinar-2026-11.html (source content + look, not served as part of the portal)
+index.html              series root: forwards to the current edition (change "1/" when #2 goes live)
+assets/                 shared by all events
+  people.js             presenter registry: id → name, job title, photo
+  people/               presenter photos, <id>.jpg (square; missing → initials)
+  logos/                logo-weiss.png (dark bg), logo-grau.png (light bg)
+  fonts/                Montserrat 400/600/700 woff2
+1/                      Data+ Academy #1 · 24 Nov 2026 · "What's cooking in Data+"
+  index.html            the portal
+  academy.css           styles (tokens below)
+  academy.js            rendering, views, viewer, keyboard, timing, theme
+  content/academy.js    sessions, blocks, links  ← the file to edit
+  media/screenshots/    images used by this event's blocks
+2/                      Data+ Academy #2 · 16 Dec 2026 · "Coming soon…" placeholder
+reference/              webinar-2026-11.html (source content + look, not part of the portal)
 ```
+
+Branching #2 (planned for about 2026-11-25): copy `index.html`, `academy.css`, `academy.js`
+from `1/` into `2/` (replacing the "Coming soon" page) but **keep** `2/content/academy.js`
+(already a draft with the Data Quality block, times and order still placeholders) and
+`2/media/` (Data Quality screenshot). Then set the root redirect to `2/`; in
+`1/content/academy.js` keep the December entry pointing to `../2/`.
 
 ## Content (from the webinar page)
 
 **Session 1 — "What's cooking in Data+", Tue 24 Nov 2026, 45 min, English.**
 Start time not fixed yet. Audience: developers building with Data+, consultants at partners,
-"anyone who asks why". Moderator: Christof Schwarz.
+"anyone who asks why". Moderator: Christof Schwarz. Presenters (shown in the Welcome
+block; registry in `assets/people.js`, photos in `assets/people/<id>.jpg`):
+Christof Schwarz (Moderator), Ahmad Abou Ezzah (Data+ Specialist), Leon Schmidt (Senior Consultant).
 
 | Offset | Min | Block | Tag | Content / links |
 |---|---|---|---|---|
 | 0:00 | 3 | Welcome | (frame) | Topics, how to send questions |
-| 0:03 | 12 | New in the kitchen | Product news | Data+ Cloud Admin Console (`media/screenshots/cloud-admin-console.webp`, CTA "Become an early tester" → https://waitlist.leitart.de), Data Quality extension (`data-quality-extension.webp`, 1,000,000 rows, 90.7 % score), Hello Data+ publish objects to origin sheet (`hello-dataplus-publish.webp`) |
+| 0:03 | 12 | New in the kitchen | Product news | Three cards, in this order: Hello Data+ publish objects to origin sheet (`hello-dataplus-publish.webp`), Data+ Cloud Admin Console (`cloud-admin-console.webp`, CTA "Become an early tester" → https://waitlist.leitart.de, Tenant Cleanup sheet), "Still working on …" list: Data Quality extension, Data Lineage, Language Switcher, 3D Models, Landing Page (Data+ Hub). The Data Quality screenshot moved to event #2 (2026-11-18). |
 | 0:15 | 12 | Financial Planning with the help of Claude | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
-| 0:27 | 10 | Shopfloor App under the hood | Data+ Forms | Building blocks of a shopfloor data-entry app |
+| 0:27 | 10 | Data+ Flow | Example: Shopfloor App | Data+ Flow demonstrated on the example of the Shopfloor App (renamed 2026-11-18, was "Shopfloor App under the hood" / Data+ Forms) |
 | 0:37 | 8 | Q&A | (frame) | Live questions |
 
 **Session 2 — Wed 16 Dec 2026 (save the date).** Teasers: Data+ Table in depth (writeback
@@ -103,6 +118,19 @@ Related extension source projects in `../`: `qlikextension_cloudadmin`,
 
 ## Look and feel (from the webinar page)
 
+**Layout (2026-11-18):** one screen, no vertical page scroll on desktop (≥ 900 × 560 px):
+header, chip row + proportional agenda bar, then a stage showing one view at a time:
+Overview (key `0`) → one view per block (`1`–`9`) → Save the date. `←` `→` step, `F` full
+screen, `T` theme. The view id is kept in the hash (`#b3`, `#next`) so a reload stays put.
+Phones and very short windows fall back to normal scrolling.
+
+**Theme switcher (2026-11-18):** sun/moon button in the header (and `T`), choice stored in
+`localStorage` (`academy-theme`), otherwise the system setting. **Dark uses the leitart.de
+colours** (from www.leitart.de/leitart.css): ink `#2e353a` (bg), ink-2 `#3a4248` (surface),
+`#23282c` (deep), fischerblau `#4ca0aa` (accent, c1), sonnengelb `#fabb00` (c2, focus ring),
+kupferrot `#e64435` (c3), white text. Light keeps the Data+ webinar tokens below. The slate
+dark tokens listed below are the webinar page's and are no longer used.
+
 Dark by default, light variant via `prefers-color-scheme` and `data-theme`.
 
 - Font: Montserrat 400/500/600/700 (local woff2 in `assets/fonts/`, Google Fonts as fallback).
@@ -120,6 +148,13 @@ Dark by default, light variant via `prefers-color-scheme` and `data-theme`.
 - Logo: `assets/logos/logo-weiss.png` on dark, `logo-grau.png` on light ("data plus · a leitart
   solution"). The webinar page also has an inline SVG version of the logo (in `reference/`).
 - Mobile: works at phone width, 16 px side gutters, no horizontal scroll.
+
+## Workflow: local first, then publish
+
+Work against `npm start` (https://localhost:3000, the full-screen Qlik view works there).
+Publish only when asked: commit + `git push` to `main`; GitHub Pages rebuilds in about
+1–2 minutes, then https://leitartgmbh.github.io/dataplus-academy/ shows the new version
+(hard-reload, Pages caches for ~10 min).
 
 ## Running locally
 
@@ -166,7 +201,7 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
     (Home, Scenario Management, Planning, Analysis, Agent Log), plus a **copy-ready Claude
     prompt panel** (prompts from `../customer-mashups/pages/qlik-data-in-action.js`
     `promptPanel` and `warsaw-cfo.prompts.js`).
-  - Shopfloor App under the hood → **Quality Gate** sheet (app `25a4a384…`, sheet `PrNp`).
+  - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `25a4a384…`, sheet `PrNp`).
   - New in the kitchen / Cloud Admin Console → **Tenant Cleanup** sheet (app `249acb4b…`,
     sheet `ZrnYes`) next to the screenshot + waitlist CTA.
   - Data Quality extension → screenshot only (viewer app is in a personal space).

@@ -10,6 +10,8 @@
                 (null: date only, no countdown and no live-minute tracker)
      duration   minutes
      recording  URL once the recording exists, else null
+     url        optional page for a later edition (e.g. "../2/"), linked from "Save the date"
+     presenters ids from ../assets/people.js, or { id, role } with a session role
      blocks     the agenda (sessions without blocks are shown as "Save the date")
 
    Block fields
@@ -19,10 +21,14 @@
      frame: true     dashed "frame" card (welcome, Q&A)
      tag             { label, color: "c1" | "c2" | "c3" | "gold" }
      figures         screenshots: { src, width, height, alt, title, text, tag, links }
+                     or a text card: { kind: "list", title, tag, items: [{ title, text }] }
      links           { kind: "qlik" | "link", label, url, hint }
                        qlik → full-screen modal where embedding works, else new tab
                        link → new tab
      prompts         { title, note, items: [{ title, text }] }  copy-ready prompts
+     presenters      true = show all session presenters in this block,
+                     or a list of ids, e.g. ["leon-schmidt"]
+     audience: true  repeat the session's "Who it is for" row at the bottom of this block
    ========================================================================== */
 (function () {
   var TENANT = "https://leitart.eu.qlikcloud.com";
@@ -50,12 +56,19 @@
         eyebrow: "Data+ Webinar · November edition",
         title: "What's cooking in",
         titleAccent: "Data+",
-        lead: "45 minutes on what's new across the Data Plus Extension family: planning with Claude, and a look behind a real shopfloor app built with Data+ Forms. The session is held in English.",
+        lead: "45 minutes on what's new across the Data Plus Extension family: planning with Claude, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
         date: "2026-11-24",
         start: "2026-11-24T16:00:00+01:00",
         duration: 45,
         language: "English",
         recording: null,
+
+        /* ids from ../assets/people.js (names, job titles, photos are shared by all events) */
+        presenters: [
+          { id: "christof-schwarz", role: "Moderator" },
+          "ahmad-abou-ezzah",
+          "leon-schmidt"
+        ],
 
         audience: {
           title: "For people who want to know why it works, not only that it works",
@@ -70,15 +83,26 @@
           {
             from: 0, minutes: 3, frame: true,
             title: "Welcome",
-            text: "Introduction to today's topics and how to send in your questions.",
-            who: "Moderator: Christof Schwarz"
+            text: "Introduction to today's topics, the people presenting them, and how to send in your questions.",
+            presenters: true,
+            audience: true
           },
           {
             from: 3, minutes: 12,
             tag: { label: "Product news", color: "c1" },
             title: "New in the kitchen",
-            text: "The latest additions across the Data Plus Extension family, shown live in Qlik, including first looks at the new Cloud Admin Console, the Data Quality extension and sheet publishing in Hello Data+.",
+            text: "The latest additions across the Data Plus Extension family, shown live in Qlik, starting with sheet publishing in Hello Data+ and the new Cloud Admin Console, plus what we are still working on.",
             figures: [
+              {
+                src: "media/screenshots/hello-dataplus-publish.webp", width: 1205, height: 825,
+                alt: "Hello Data+ dialog Publish objects to origin sheet: source and copied sheet side by side, with moved objects in red, an added object in green, and a summary of 2 moved, 1 removed and 1 added object",
+                tag: { label: "New", color: "c2" },
+                title: "Hello Data+: publish objects to the origin sheet",
+                text: "Rework a copy of a sheet, compare it visually with the original and see which objects were moved, removed or added. Then sync all changes back to the origin sheet in one click.",
+                links: [
+                  { kind: "link", label: "Become an early tester", url: WAITLIST, primary: true }
+                ]
+              },
               {
                 src: "media/screenshots/cloud-admin-console.webp", width: 1600, height: 905,
                 alt: "Data+ Cloud Admin Console, User Space Rights view: a matrix of users and Qlik Cloud spaces showing each user's roles, assigned directly or via groups",
@@ -91,18 +115,16 @@
                 ]
               },
               {
-                src: "media/screenshots/data-quality-extension.webp", width: 1614, height: 711,
-                alt: "Data Quality extension on a table of one million article rows: a 90.7% quality score, rule tiles for null, empty, email, too cheap and custom checks with row counts, and per-row issue badges",
-                tag: { label: "New", color: "c3" },
-                title: "Data Quality extension",
-                text: "Define checks such as null, empty, email format, price too low or your own rule, and see the quality score, hits per column and issues per row at a glance. Shown here on 1,000,000 rows."
-              },
-              {
-                src: "media/screenshots/hello-dataplus-publish.webp", width: 1205, height: 825,
-                alt: "Hello Data+ dialog Publish objects to origin sheet: source and copied sheet side by side, with moved objects in red, an added object in green, and a summary of 2 moved, 1 removed and 1 added object",
-                tag: { label: "New", color: "c2" },
-                title: "Hello Data+: publish objects to the origin sheet",
-                text: "Rework a copy of a sheet, compare it visually with the original and see which objects were moved, removed or added. Then sync all changes back to the origin sheet in one click."
+                kind: "list",
+                tag: { label: "Coming next", color: "gold" },
+                title: "Still working on …",
+                items: [
+                  { title: "Data Quality extension", text: "Rules, quality score and issues per row" },
+                  { title: "Data Lineage" },
+                  { title: "Language Switcher" },
+                  { title: "3D Models" },
+                  { title: "Landing Page", text: "Data+ Hub" }
+                ]
               }
             ]
           },
@@ -140,10 +162,10 @@
           },
           {
             from: 27, minutes: 10,
-            tag: { label: "Data+ Forms", color: "c3" },
-            title: "Shopfloor App under the hood",
-            chip: "Shopfloor App",
-            text: "A walk through the building blocks of a shopfloor data-entry app made with Data+ Forms, using the Quality Gate as the example: visual inspection and quality review, right inside Qlik.",
+            tag: { label: "Example: Shopfloor App", color: "c3" },
+            title: "Data+ Flow",
+            chip: "Data+ Flow",
+            text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, with the Quality Gate for visual inspection and quality review, right inside Qlik.",
             links: [
               { kind: "qlik", label: "Quality Gate", url: sheet("25a4a384-6f20-4b9f-b4ed-b8a017d50a69", "PrNp"), hint: "Live sheet" }
             ]
@@ -164,6 +186,7 @@
         title: "Next session",
         date: "2026-12-16",
         start: null,
+        url: "../2/", urlLabel: "Data+ Academy #2",
         text: "Our December edition goes deep on one product and adds help for Qlik Cloud admins.",
         teasers: [
           { title: "Data+ Table in depth", text: "A detailed look at the interactive writeback table for structured, row-based data entry in Qlik." },
