@@ -128,7 +128,7 @@ Phones and very short windows fall back to normal scrolling.
 
 **Qlik viewer (2026-11-18):** opens over the stage only; header, chip row and agenda bar stay
 unchanged. The viewer has **no bar of its own**: while a sheet is open, a close button (X,
-or `Esc`) and, for blocks with prompts, the prompts button appear in the chip row next to the
+or `Esc`), an "open in new tab" button and, for blocks with prompts, the prompts button appear in the chip row next to the
 full-screen button. "Open in Qlik" sits in the loading/blank state of the viewer. No sheet tabs
 (Qlik's own sheet navigation is used). **No footer and no ←/→ buttons** (keys only), for
 more room. Any navigation (chips, arrows, keys) closes it; the iframes

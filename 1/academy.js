@@ -533,7 +533,11 @@
 
     promptBtn.hidden = t.prompts < 0;
     renderViewerPrompts();
+    measureTop();
+    document.body.classList.add("viewer-open");
     viewer.hidden = false;
+    $("#viewerNewTab").href = t.url;
+    $("#viewerNewTab").hidden = false;
     $("#viewerClose").hidden = false;
   }
   function renderViewerPrompts() {
@@ -542,12 +546,23 @@
     promptBtn.setAttribute("aria-pressed", String(show));
     promptBtn.setAttribute("aria-label", show ? "Hide prompts" : "Show prompts");
     promptBtn.title = show ? "Hide prompts" : "Show prompts";
-    vPrompts.hidden = !show;
-    if (show) vPrompts.innerHTML = promptsHtml(promptSets[t.prompts]);
+    // keep the old content while fading out; fill it before fading in
+    if (show) $("#viewerPromptsInner").innerHTML = promptsHtml(promptSets[t.prompts]);
+    vPrompts.classList.toggle("is-open", show);
+    vPrompts.setAttribute("aria-hidden", String(!show));
+  }
+
+  // header height for the fold-away animation while a sheet is open
+  function measureTop() {
+    var top = $(".top");
+    if (top && !document.body.classList.contains("viewer-open")) top.style.setProperty("--top-h", top.scrollHeight + "px");
   }
   function closeViewer() {
     if (!viewer || viewer.hidden) return;
     viewer.hidden = true;
+    document.body.classList.remove("viewer-open");
+    vPrompts.classList.remove("is-open");
+    $("#viewerNewTab").hidden = true;
     $("#viewerClose").hidden = true;
     promptBtn.hidden = true;
     if (lastOpener && document.contains(lastOpener)) lastOpener.focus({ preventScroll: true });
@@ -701,8 +716,9 @@
     var k = indexOfView(id);
     if (k >= 0 && k !== current) go(k, { keepHash: true });
   });
-  window.addEventListener("resize", tick);
+  window.addEventListener("resize", function () { measureTop(); tick(); });
 
   render();
+  measureTop();
   setInterval(tick, 1000);   // countdown, live minute and the moving marker
 })();
