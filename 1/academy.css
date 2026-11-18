@@ -75,6 +75,8 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
   /* while a Qlik sheet is open the header folds away (more room for Qlik) and comes back on close */
   .top { max-height: var(--top-h, 120px); overflow: hidden; transition: max-height .45s var(--ease), opacity .3s ease; }
   body.viewer-open .top { max-height: 0; opacity: 0; }
+  /* clip only while folding; once settled the events dropdown may hang out below the header */
+  .top.is-settled { overflow: visible; }
 }
 .brand { flex: none; display: flex; align-items: center; gap: 12px; text-decoration: none; }
 .logo { height: 44px; width: auto; }

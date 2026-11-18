@@ -534,6 +534,8 @@
     promptBtn.hidden = t.prompts < 0;
     renderViewerPrompts();
     measureTop();
+    $(".top").classList.remove("is-settled");
+    setEventsMenu(false);
     document.body.classList.add("viewer-open");
     viewer.hidden = false;
     $("#viewerNewTab").href = t.url;
@@ -553,6 +555,15 @@
   }
 
   // header height for the fold-away animation while a sheet is open
+  // after the header has slid back in, stop clipping it (the events dropdown needs to overflow)
+  (function () {
+    var top = $(".top");
+    if (!top) return;
+    top.classList.add("is-settled");
+    top.addEventListener("transitionend", function (e) {
+      if (e.target === top && e.propertyName === "max-height" && !document.body.classList.contains("viewer-open")) top.classList.add("is-settled");
+    });
+  })();
   function measureTop() {
     var top = $(".top");
     if (top && !document.body.classList.contains("viewer-open")) top.style.setProperty("--top-h", top.scrollHeight + "px");
@@ -561,6 +572,8 @@
     if (!viewer || viewer.hidden) return;
     viewer.hidden = true;
     document.body.classList.remove("viewer-open");
+    // fallback for reduced motion (no transitionend): unclip the header once it is back
+    setTimeout(function () { if (!document.body.classList.contains("viewer-open")) $(".top").classList.add("is-settled"); }, 600);
     vPrompts.classList.remove("is-open");
     $("#viewerNewTab").hidden = true;
     $("#viewerClose").hidden = true;
