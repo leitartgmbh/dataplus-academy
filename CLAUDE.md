@@ -97,7 +97,7 @@ Christof Schwarz (Moderator), Ahmad Abou Ezzah (Data+ Specialist), Leon Schmidt 
 table), New Qlik Cloud Admin support (Cloud Admin Console incl. tenant cleanup, early testers
 via waitlist.leitart.de), Surprise topic.
 
-Footer: "Dataplus · a Leitart solution · Berlin" · dataplusextension.com
+Footer: "Data+ · a Leitart solution · Berlin" · dataplusextension.com
 
 ### Qlik targets already known (from `../customer-mashups/catalog/apps.js`, tenant `leitart.eu.qlikcloud.com`)
 
@@ -164,7 +164,7 @@ Dark by default, light variant via `prefers-color-scheme` and `data-theme`.
   bar (segment widths = minutes), agenda cards with a coloured inset left edge per block,
   dashed "frame" cards for welcome/Q&A, screenshot figures with caption + CTA, lightbox,
   "Save the date" band, `prefers-reduced-motion` respected.
-- Logo: `assets/logos/logo-weiss.png` on dark, `logo-grau.png` on light ("data plus · a leitart
+- Logo: `assets/logos/logo-weiss.png` on dark, `logo-grau.png` on light (alt "Data+ · a Leitart
   solution"). The webinar page also has an inline SVG version of the logo (in `reference/`).
   Logo + "Academy" link to https://www.leitart.de/en/data-plus-academy (same tab, since 2026-11-19).
 - Mobile: works at phone width, 16 px side gutters, no horizontal scroll.

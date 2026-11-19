@@ -68,7 +68,7 @@
         eyebrow: "Office Hours 01",
         title: "What's cooking in",
         titleAccent: "Data+",
-        lead: "45 minutes on what's new across the Data Plus Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
+        lead: "45 minutes on what's new across the Data+ Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
         date: "2026-11-24",
         start: "2026-11-24T16:00:00+01:00",
         duration: 45,
@@ -126,16 +126,15 @@
             from: 3, minutes: 12,
             tag: { label: "Product news", color: "c1" },
             title: "New in the kitchen",
-            text: "The latest additions across the Data Plus Extension family, shown live in Qlik, starting with sheet publishing in Hello Data+ and the new Cloud Admin Console, plus what we are still working on.",
+            text: "The latest additions across the Data+ Extension family, shown live in Qlik, starting with sheet publishing in Hello Data+ and the new Cloud Admin Console, plus what we are still working on.",
             figures: [
               {
                 src: "media/screenshots/hello-dataplus-publish.webp", width: 1205, height: 825,
                 alt: "Hello Data+ dialog Publish objects to origin sheet: source and copied sheet side by side, with moved objects in red, an added object in green, and a summary of 2 moved, 1 removed and 1 added object",
                 tag: { label: "New", color: "c2" },
                 title: "Hello Data+: publish objects to the origin sheet",
-                text: "Rework a copy of a sheet, compare it visually with the original and see which objects were moved, removed or added. Then sync all changes back to the origin sheet in one click.",
                 links: [
-                  { kind: "link", label: "Become an early tester", url: WAITLIST, primary: true }
+                  { kind: "link", label: "Become an early tester", url: WAITLIST + "/?program=hello-dataplus", hint: "waitlist.leitart.de", primary: true }
                 ]
               },
               {
@@ -143,9 +142,8 @@
                 alt: "Data+ Cloud Admin Console, User Space Rights view: a matrix of users and Qlik Cloud spaces showing each user's roles, assigned directly or via groups",
                 tag: { label: "New", color: "c1" },
                 title: "Data+ Cloud Admin Console",
-                text: "See who has which role in which Qlik Cloud space, directly or through groups, in one matrix. Also included: user group assignment, user roles and audit reports.",
                 links: [
-                  { kind: "link", label: "Become an early tester", url: WAITLIST, primary: true },
+                  { kind: "link", label: "Become an early tester", url: WAITLIST + "/?program=cloud-admin", hint: "waitlist.leitart.de", primary: true },
                   { kind: "qlik", label: "Tenant Cleanup", url: sheet("249acb4b-031c-4811-aaee-554f0d2c5cdb", "ZrnYes"), hint: "Live sheet", shot: SHOT + "tenant-cleanup.png" }
                 ]
               },
@@ -232,7 +230,7 @@
     ],
 
     footer: {
-      left: "Dataplus · a Leitart solution · Berlin",
+      left: "Data+ · a Leitart solution · Berlin",
       links: [
         { label: "dataplusextension.com", url: "https://dataplusextension.com" },
         { label: "Documentation", url: DOCS }

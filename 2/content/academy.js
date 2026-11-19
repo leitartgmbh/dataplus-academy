@@ -73,7 +73,7 @@
     ],
 
     footer: {
-      left: "Dataplus · a Leitart solution · Berlin",
+      left: "Data+ · a Leitart solution · Berlin",
       links: [
         { label: "dataplusextension.com", url: "https://dataplusextension.com" },
         { label: "Documentation", url: DOCS }
