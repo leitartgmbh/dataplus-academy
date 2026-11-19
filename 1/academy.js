@@ -75,6 +75,8 @@
   // ?startsat=2026-11-18T15:30:00 (ISO; without offset = local time) replaces the start of the
   // shown session, to test the countdown, live minute and the moving marker
   // ?presenter=1 shows links marked presenter: true (e.g. the HubSpot question inbox)
+  // presenter mode: live Qlik sheets + presenter-only links. Visitors see screenshots instead
+  // (a live sheet would only show them a Qlik login). Toggle: Ctrl/Cmd-click on the chip row.
   var presenterMode = new URLSearchParams(location.search).get("presenter") === "1";
   function visible(l) { return !l.presenter || presenterMode; }
 
@@ -100,15 +102,18 @@
     var q = "", hint = l.hint || "";
     if (isQlik) {
       q = ' data-q="' + targets.length + '"';
-      targets.push({ label: l.label, url: l.url, hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1 });
-      hint = hint ? hint + (canEmbed ? " · Qlik" : " · opens Qlik") : (canEmbed ? "Qlik sheet" : "Opens Qlik in a new tab");
+      targets.push({ label: l.label, url: l.url, shot: l.shot || "", shotCaption: l.shotCaption || "", hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1 });
+      hint = !presenterMode ? (hint ? hint.replace(/^Live sheet$/, "Qlik sheet") + " · screenshot" : "Screenshot") :
+        hint ? hint + (canEmbed ? " · Qlik" : " · opens Qlik") : (canEmbed ? "Qlik sheet" : "Opens Qlik in a new tab");
     } else if (!hint) {
       try { hint = new URL(l.url).hostname.replace(/^www\./, ""); } catch (e) { hint = ""; }
     }
     var isMail = l.kind === "mail" || /^mailto:/.test(l.url);
     var icon = isQlik ? ICON.qlik : (l.icon && ICON[l.icon]) || (isMail ? ICON.mail : l.kind === "recording" ? ICON.play : ICON.link);
-    return '<a class="qlink' + (l.primary ? " primary" : "") + (isMail ? " mail" : "") + '" href="' + esc(l.url) + '"' + (isMail ? "" : ' target="_blank" rel="noopener"') + q +
-      (isQlik ? ' title="' + esc(canEmbed ? "Opens full screen. Ctrl/Cmd-click for a new tab." : "Opens in Qlik (login required)") + '"' : "") + ">" +
+    // visitors: Qlik links show the screenshot in the page and never lead to the Qlik login
+    var href = isQlik && !presenterMode ? "#" : l.url;
+    return '<a class="qlink' + (l.primary ? " primary" : "") + (isMail ? " mail" : "") + '" href="' + esc(href) + '"' + (isMail || (isQlik && !presenterMode) ? "" : ' target="_blank" rel="noopener"') + q +
+      (isQlik ? ' title="' + esc(!presenterMode ? "Shows a screenshot of the Qlik sheet" : canEmbed ? "Opens full screen. Ctrl/Cmd-click for a new tab." : "Opens in Qlik (login required)") + '"' : "") + ">" +
       '<span class="ico">' + icon + '</span><span class="lbl"><b>' + esc(l.label) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : "") + "</span></a>";
   }
   function linksHtml(list, blockIndex, block, cls) {
@@ -185,7 +190,7 @@
     }).join("");
 
     var scale = "Times are minutes from the start" + (t0 ? ", clock times " + fmtClock(t0, true).split(" ").pop() : "") +
-      (targets.length ? (canEmbed ? " · Qlik sheets open full screen" : " · Qlik sheets need a leitart Qlik login") : "");
+      (targets.length ? (!presenterMode ? " · Qlik sheets shown as screenshots" : canEmbed ? " · Qlik sheets open full screen" : " · Qlik sheets need a leitart Qlik login") : "");
 
     var aud = metaHtml(true);
 
@@ -513,6 +518,21 @@
     // scrolling layout (phones): the viewer is fixed, so it starts below the chip row
     viewer.style.top = getComputedStyle(viewer).position === "fixed" ? Math.max(0, $("#walk").getBoundingClientRect().bottom) + "px" : "";
 
+    if (!slots.has(k) && !presenterMode) {
+      var shotSlot = document.createElement("div");
+      shotSlot.className = "slot shot-slot";
+      var note = !t.shot ? "" : '<div class="shot-note">' + ICON.qlik + "<span><b>" + esc(t.shotCaption || t.label) + "</b> · screenshot of the Qlik sheet. " +
+        "In the session we show it live in Qlik (needs a leitart Qlik login).</span></div>";
+      shotSlot.innerHTML = (t.shot ? '<img src="' + esc(t.shot) + '" alt="Screenshot of the Qlik sheet ' + esc(t.label) + '">' : "") +
+        '<div class="shot-missing"' + (t.shot ? " hidden" : "") + "><p class=\"state-title\">" + esc(t.label) + '</p><p class="state-meta">Shown live in the session. A screenshot follows here.</p></div>' + note;
+      var img = shotSlot.querySelector("img");
+      if (img) img.addEventListener("error", function () {
+        img.hidden = true; shotSlot.querySelector(".shot-missing").hidden = false;
+        var n = shotSlot.querySelector(".shot-note"); if (n) n.hidden = true;
+      }, { once: true });
+      vBody.appendChild(shotSlot);
+      slots.set(k, { slot: shotSlot, ready: true });
+    }
     if (!slots.has(k)) {
       var frame = document.createElement("iframe");
       frame.src = t.url;
@@ -539,7 +559,7 @@
     document.body.classList.add("viewer-open");
     viewer.hidden = false;
     $("#viewerNewTab").href = t.url;
-    $("#viewerNewTab").hidden = false;
+    $("#viewerNewTab").hidden = !presenterMode;   // visitors would only reach a Qlik login
     $("#viewerClose").hidden = false;
   }
   function renderViewerPrompts() {
@@ -670,11 +690,30 @@
   function closeLightbox() { lb.hidden = true; lb.innerHTML = ""; if (lbOpener) lbOpener.focus({ preventScroll: true }); }
   lb.addEventListener("click", closeLightbox);
 
+  /* ---------- presenter mode: Ctrl/Cmd-click on the chip row toggles ?presenter=1 ---------- */
+  function setPresenterMode(on) {
+    presenterMode = on;
+    var p = new URLSearchParams(location.search);
+    if (on) p.set("presenter", "1"); else p.delete("presenter");
+    var qs = p.toString();
+    try { history.replaceState(null, "", location.pathname + (qs ? "?" + qs : "") + location.hash); } catch (err) { /* file:// */ }
+    var keep = current;
+    closeViewer();
+    render();
+    go(keep, { instant: true });
+    toast(on ? "Presenter mode on: live Qlik sheets" : "Presenter mode off: screenshots for visitors");
+  }
+
   /* ---------- clicks (delegated) ---------- */
   document.addEventListener("click", function (e) {
     var el;
+    if ((e.ctrlKey || e.metaKey) && e.target.closest("#walk .chips, #walk .bar")) {
+      e.preventDefault();
+      setPresenterMode(!presenterMode);
+      return;
+    }
     if ((el = e.target.closest("a[data-q]"))) {
-      if (!canEmbed || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0) return;
+      if (presenterMode && (!canEmbed || e.ctrlKey || e.metaKey || e.shiftKey || e.altKey || e.button !== 0)) return;
       e.preventDefault();
       openViewer(Number(el.dataset.q), el);
       return;

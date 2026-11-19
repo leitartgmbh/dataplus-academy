@@ -335,6 +335,14 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
 /* crop the Qlik top bar: shift the iframe up by --crop-top */
 .slot iframe { position: absolute; left: 0; top: calc(-1 * var(--crop-top, 0px)); width: 100%; height: calc(100% + var(--crop-top, 0px)); border: 0; background: #fff; display: block; }
 /* prompts panel: the sheet narrows smoothly, then the prompts fade in; closing reverses it */
+/* visitor view of a Qlik link: screenshot + note instead of the live sheet */
+.shot-slot { background: var(--bg-deep); display: flex; flex-direction: column; }
+.shot-slot img { flex: 1 1 auto; min-height: 0; width: 100%; object-fit: contain; object-position: center top; padding: 14px 18px 0; }
+.shot-missing { flex: 1 1 auto; display: grid; place-content: center; text-align: center; gap: 8px; padding: 24px; }
+.shot-note { flex: none; display: flex; align-items: center; gap: 10px; margin: 12px 18px 14px; padding: 10px 16px; font-size: 13px; color: var(--fg);
+  background: var(--surface); border: 1px solid var(--line); border-radius: 14px 0 14px 5px; }
+.shot-note b { color: var(--fg-strong); }
+.shot-note svg { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 .viewer-prompts { --vp-w: min(380px, 42vw); flex: 0 0 auto; width: 0; opacity: 0; overflow: hidden; background: var(--bg); border-left: 1px solid transparent;
   transition: width .5s var(--ease) .18s, opacity .2s ease 0s, border-color .2s ease .18s; }
 .viewer-prompts.is-open { width: var(--vp-w); opacity: 1; border-left-color: var(--line);

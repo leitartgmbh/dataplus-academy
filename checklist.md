@@ -54,7 +54,11 @@ while the next event is only a "Coming soon" page).
       ids). Demo apps get copied, moved or replaced between sessions (e.g. 2026-11-18: the
       Data+ Flow / Shopfloor block moved to app `00ea92a4…`); do not reuse links from the
       previous folder unchecked.
-- [ ] Every Qlik link opens the intended sheet (logged-in browser) and "Open in Qlik" works.
+- [ ] Every Qlik link opens the intended sheet (logged-in browser, `?presenter=1`) and
+      "Open in Qlik" works.
+- [ ] **Screenshot per Qlik link** for visitors (`shot`, in `<n>/media/screenshots/qlik/`):
+      high resolution, current, no customer names or internal data. Without `?presenter=1`
+      the page shows these instead of the live sheet (a visitor would only get a Qlik login).
 - [ ] Screenshots are current; no customer names or internal data visible in them.
 - [ ] Presenter photos and job titles in `assets/` are up to date; everyone shown agreed.
 - [ ] Copy-ready prompts match scenario names that exist in the planning app.
@@ -67,6 +71,7 @@ while the next event is only a "Coming soon" page).
       link there too (its "Save your seat" button; the QR code is generated from it).
 - [ ] Wrap-up: next session (title, date, time, description), "How to engage" links.
 - [ ] Presenter-only links (`presenter: true`) still hidden without `?presenter=1`.
+- [ ] Present from the presenter address (`?presenter=1`, or Ctrl/Cmd-click on the chip row).
 
 ## 3 · Before publishing
 

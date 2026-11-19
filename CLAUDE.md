@@ -135,7 +135,10 @@ more room. Any navigation (chips, arrows, keys) closes it; the iframes
 stay loaded. **Live marker:** a vertical marker moves along the agenda bar (updated every
 second, animated) while the session runs, hidden before and after. Test it with
 `?startsat=2026-11-18T15:30:00` (ISO; without offset = local time), which replaces the
-session start for countdown, live minute and marker. **Presenter mode:** `?presenter=1` shows links marked
+session start for countdown, live minute and marker. **Presenter mode:** `?presenter=1` (or Ctrl/Cmd-click on the chip row, toggles it) opens
+Qlik sheets live and shows links marked `presenter: true`. **Without it (visitors), Qlik links
+show a screenshot** (`shot` per link, `<n>/media/screenshots/qlik/`) with a note in the viewer
+area, never the Qlik login. Presenter-only links:
 `presenter: true` (Q&A: HubSpot "Submitted questions" inbox). Hidden for everyone else, but
 still readable in the page source (static site).
 

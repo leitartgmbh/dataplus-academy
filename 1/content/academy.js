@@ -27,6 +27,9 @@
      figures         screenshots: { src, width, height, alt, title, text, tag, links }
                      or a text card: { kind: "list", title, tag, items: [{ title, text }] }
      links           { kind: "qlik" | "link" | "mail", label, url, hint }
+                     qlik links: shot = screenshot shown to visitors (without ?presenter=1);
+                     the live sheet only opens in presenter mode; shotCaption = name in the
+                     note under the screenshot (default: the link label)
                      presenter: true → only shown with ?presenter=1 in the address
                        qlik → full-screen modal where embedding works, else new tab
                        link → new tab
@@ -42,6 +45,7 @@
 
   var PLANNING = "5a9e541f-195f-4119-a331-5b302a5dd773";
   var WAITLIST = "https://waitlist.leitart.de";
+  var SHOT = "media/screenshots/qlik/";   // screenshots shown instead of live sheets for visitors
   var DOCS = "https://wiki.leitart.de/";
   var MAIL = { kind: "mail", label: "For more questions", url: "mailto:christof.schwarz@leitart.de", hint: "christof.schwarz@leitart.de" };
   var SEAT_2 = "https://2d9kdh.share-eu1.hsforms.com/2MrnxkMtWTuGnnBCw-fAAqw?session=Office%20Hours%2002%20%C2%B7%2016%20Dec%202026";
@@ -142,7 +146,7 @@
                 text: "See who has which role in which Qlik Cloud space, directly or through groups, in one matrix. Also included: user group assignment, user roles and audit reports.",
                 links: [
                   { kind: "link", label: "Become an early tester", url: WAITLIST, primary: true },
-                  { kind: "qlik", label: "Tenant Cleanup", url: sheet("249acb4b-031c-4811-aaee-554f0d2c5cdb", "ZrnYes"), hint: "Live sheet" }
+                  { kind: "qlik", label: "Tenant Cleanup", url: sheet("249acb4b-031c-4811-aaee-554f0d2c5cdb", "ZrnYes"), hint: "Live sheet", shot: SHOT + "tenant-cleanup.png" }
                 ]
               },
               {
@@ -166,11 +170,11 @@
             chip: "Planning with MCP",
             text: "How Claude supports budgeting and forecasting on top of Qlik apps with Data+ writeback. Claude works on the MCP Planning app; every step it takes lands in the Agent Log.",
             links: [
-              { kind: "qlik", label: "Home", url: sheet(PLANNING, "hKMaP"), hint: "Start page" },
-              { kind: "qlik", label: "Scenario Management", url: sheet(PLANNING, "f179d595-5275-460e-9f9f-88cf7bb20686"), hint: "Create and manage scenarios" },
-              { kind: "qlik", label: "Planning", url: sheet(PLANNING, "f7bcc9ea-a33c-47a2-a165-acf1079254d3"), hint: "P&L plan per scenario" },
-              { kind: "qlik", label: "Analysis", url: sheet(PLANNING, "5672467e-5489-47a6-9e57-19e5a400c3ea"), hint: "Compare two scenarios" },
-              { kind: "qlik", label: "Agent Log", url: sheet(PLANNING, "jmVMUA"), hint: "What Claude changed and why" }
+              { kind: "qlik", label: "Home", url: sheet(PLANNING, "hKMaP"), hint: "Start page", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
+              { kind: "qlik", label: "Scenario Management", url: sheet(PLANNING, "f179d595-5275-460e-9f9f-88cf7bb20686"), hint: "Create and manage scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
+              { kind: "qlik", label: "Planning", url: sheet(PLANNING, "f7bcc9ea-a33c-47a2-a165-acf1079254d3"), hint: "P&L plan per scenario", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
+              { kind: "qlik", label: "Analysis", url: sheet(PLANNING, "5672467e-5489-47a6-9e57-19e5a400c3ea"), hint: "Compare two scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
+              { kind: "qlik", label: "Agent Log", url: sheet(PLANNING, "jmVMUA"), hint: "What Claude changed and why", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" }
             ],
             prompts: {
               title: "Prompts for Claude",
@@ -198,7 +202,7 @@
             chip: "Data+ Flow",
             text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, with the Quality Gate for visual inspection and quality review, right inside Qlik.",
             links: [
-              { kind: "qlik", label: "Quality Gate", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/PrNp/", hint: "Live sheet" }
+              { kind: "qlik", label: "Quality Gate", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/PrNp/", hint: "Live sheet", shot: SHOT + "quality-gate.png" }
             ]
           },
           {
