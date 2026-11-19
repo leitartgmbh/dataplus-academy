@@ -138,7 +138,10 @@ second, animated) while the session runs, hidden before and after. Test it with
 session start for countdown, live minute and marker. **Presenter mode:** `?presenter=1` (or Ctrl/Cmd-click on the chip row, toggles it) opens
 Qlik sheets live and shows links marked `presenter: true`. **Without it (visitors), Qlik links
 show a screenshot** (`shot` per link, `<n>/media/screenshots/qlik/`) with a note in the viewer
-area, never the Qlik login. Presenter-only links:
+area, never the Qlik login. **Architecture diagram (2026-11-19):** a block can have `diagram`
+(`src`, `alt`, `title`); in presenter mode, while one of its sheets is open, a diagram button
+next to the prompts button lays the image over the sheet on a white card (X, backdrop click or
+`Esc` closes it). Used on Financial Planning with MCP (`1/media/diagrams/planning-architecture.png`). Presenter-only links:
 `presenter: true` (Q&A: HubSpot "Submitted questions" inbox). Hidden for everyone else, but
 still readable in the page source (static site).
 

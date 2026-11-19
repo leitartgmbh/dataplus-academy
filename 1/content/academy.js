@@ -174,6 +174,12 @@
               { kind: "qlik", label: "Analysis", url: sheet(PLANNING, "5672467e-5489-47a6-9e57-19e5a400c3ea"), hint: "Compare two scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
               { kind: "qlik", label: "Agent Log", url: sheet(PLANNING, "jmVMUA"), hint: "What Claude changed and why", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" }
             ],
+            /* presenter mode: button next to the prompts button lays this over the open sheet */
+            diagram: {
+              src: "media/diagrams/planning-architecture.png", width: 2720, height: 1760,
+              title: "Architecture",
+              alt: "Architecture: Claude Desktop (project and skills) reads actuals and plan through the Qlik MCP from the Qlik app MCP Planning 2.0, and writes values and notes through the Data+ MCP into the Data+ Server writeback tables, which reach the Qlik app seconds later. Every write is recorded in the Agent log, with why."
+            },
             prompts: {
               title: "Prompts for Claude",
               note: "Click a prompt to copy it, then paste it into Claude connected to the planning app.",

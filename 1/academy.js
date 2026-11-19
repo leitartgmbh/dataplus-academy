@@ -102,7 +102,7 @@
     var q = "", hint = l.hint || "";
     if (isQlik) {
       q = ' data-q="' + targets.length + '"';
-      targets.push({ label: l.label, url: l.url, shot: l.shot || "", shotCaption: l.shotCaption || "", hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1 });
+      targets.push({ label: l.label, url: l.url, shot: l.shot || "", shotCaption: l.shotCaption || "", hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1, diagram: block.diagram || null });
       hint = !presenterMode ? (hint ? hint.replace(/^Live sheet$/, "Qlik sheet") + " · screenshot" : "Screenshot") :
         hint ? hint + (canEmbed ? " · Qlik" : " · opens Qlik") : (canEmbed ? "Qlik sheet" : "Opens Qlik in a new tab");
     } else if (!hint) {
@@ -502,7 +502,8 @@
 
   /* ---------- Qlik viewer ---------- */
   var viewer = $("#viewer"), vBody = $("#viewerBody"), vPrompts = $("#viewerPrompts"), promptBtn = $("#promptBtn");
-  var slots = new Map(), currentQ = -1, promptsOpen = false, lastOpener = null;
+  var diagramBtn = $("#diagramBtn"), vDiagram = $("#viewerDiagram");
+  var slots = new Map(), currentQ = -1, promptsOpen = false, diagramOpen = false, lastOpener = null;
 
   function viewerOpen() { return !viewer.hidden; }
   function openViewer(k, opener) {
@@ -553,6 +554,8 @@
 
     promptBtn.hidden = t.prompts < 0;
     renderViewerPrompts();
+    diagramBtn.hidden = !(presenterMode && t.diagram);
+    renderViewerDiagram();
     measureTop();
     $(".top").classList.remove("is-settled");
     setEventsMenu(false);
@@ -573,6 +576,23 @@
     vPrompts.classList.toggle("is-open", show);
     vPrompts.setAttribute("aria-hidden", String(!show));
   }
+
+  // architecture diagram over the open sheet: presenter mode, blocks with a diagram
+  function renderViewerDiagram() {
+    var t = targets[currentQ];
+    var d = t && presenterMode && t.diagram;
+    var show = !!d && diagramOpen;
+    var label = (show ? "Hide " : "Show ") + ((d && d.title) || "diagram").toLowerCase();
+    diagramBtn.setAttribute("aria-pressed", String(show));
+    diagramBtn.setAttribute("aria-label", label);
+    diagramBtn.title = label;
+    if (show) {
+      var img = $("#viewerDiagramImg");
+      if (img.getAttribute("src") !== d.src) { img.src = d.src; img.alt = d.alt || d.title || ""; if (d.width) { img.width = d.width; img.height = d.height; } }
+    }
+    vDiagram.hidden = !show;
+  }
+  function setDiagram(on) { diagramOpen = on; renderViewerDiagram(); if (!on && viewerOpen()) diagramBtn.focus({ preventScroll: true }); }
 
   // header height for the fold-away animation while a sheet is open
   // after the header has slid back in, stop clipping it (the events dropdown needs to overflow)
@@ -598,11 +618,15 @@
     $("#viewerNewTab").hidden = true;
     $("#viewerClose").hidden = true;
     promptBtn.hidden = true;
+    diagramOpen = false; vDiagram.hidden = true; diagramBtn.hidden = true;
     if (lastOpener && document.contains(lastOpener)) lastOpener.focus({ preventScroll: true });
   }
 
   promptBtn.addEventListener("click", function () { promptsOpen = !promptsOpen; renderViewerPrompts(); });
   $("#viewerClose").addEventListener("click", closeViewer);
+  diagramBtn.addEventListener("click", function () { setDiagram(!diagramOpen); });
+  $("#diagramClose").addEventListener("click", function () { setDiagram(false); });
+  vDiagram.addEventListener("click", function (e) { if (e.target === vDiagram) setDiagram(false); });
 
   /* ---------- fullscreen ---------- */
   var fsSupported = !!document.documentElement.requestFullscreen;
@@ -749,6 +773,7 @@
     if (!lb.hidden) { if (key === "Escape") { e.preventDefault(); closeLightbox(); } return; }
     if (!eventsMenu.hidden && key === "Escape") { e.preventDefault(); setEventsMenu(false); eventsBtn.focus(); return; }
 
+    if (viewerOpen() && diagramOpen && key === "Escape") { e.preventDefault(); setDiagram(false); return; }
     if (viewerOpen() && key === "Escape") { e.preventDefault(); closeViewer(); return; }
     // all other keys work as without the viewer (navigating closes it)
 

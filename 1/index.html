@@ -44,6 +44,9 @@
         <button type="button" class="icon-btn" id="promptBtn" aria-pressed="false" aria-label="Show prompts" title="Show prompts" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"/></svg>
         </button>
+        <button type="button" class="icon-btn" id="diagramBtn" aria-pressed="false" aria-label="Show architecture" title="Show architecture" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 9h6v6H3zM15 4h6v5h-6zM15 15h6v5h-6zM9 12h3V6.5h3M12 12v5.5h3"/></svg>
+        </button>
         <a class="icon-btn" id="viewerNewTab" href="#" target="_blank" rel="noopener" aria-label="Open this sheet in a new tab" title="Open in new tab" hidden>
           <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg>
         </a>
@@ -71,6 +74,15 @@
               <p class="state-meta">It stays blank if you are not logged in to Qlik in this browser, or the browser blocks Qlik's cookies inside the page.</p>
               <p><a class="btn-ghost" id="viewerExternal" href="#" target="_blank" rel="noopener">Open in Qlik
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 5h5v5M19 5l-8 8M18 14v5H5V6h5"/></svg></a></p>
+            </div>
+            <!-- presenter mode: architecture diagram laid over the open sheet -->
+            <div class="viewer-diagram" id="viewerDiagram" hidden>
+              <figure class="vd-card">
+                <button type="button" class="icon-btn vd-close" id="diagramClose" aria-label="Close the diagram" title="Close (Esc)">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18"/></svg>
+                </button>
+                <img id="viewerDiagramImg" alt="">
+              </figure>
             </div>
           </div>
           <aside class="viewer-prompts" id="viewerPrompts" aria-hidden="true"><div class="vp-inner" id="viewerPromptsInner"></div></aside>
