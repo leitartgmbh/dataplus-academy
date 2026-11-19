@@ -174,7 +174,7 @@
               { kind: "qlik", label: "Analysis", url: sheet(PLANNING, "5672467e-5489-47a6-9e57-19e5a400c3ea"), hint: "Compare two scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
               { kind: "qlik", label: "Agent Log", url: sheet(PLANNING, "jmVMUA"), hint: "What Claude changed and why", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" }
             ],
-            /* presenter mode: button next to the prompts button lays this over the open sheet */
+            /* diagram button in the chip row (any mode, sheet open or not) lays this over the stage */
             diagram: {
               src: "media/diagrams/planning-architecture.png", width: 2720, height: 1760,
               title: "Architecture",

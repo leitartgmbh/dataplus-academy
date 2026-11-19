@@ -344,8 +344,8 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
   background: var(--surface); border: 1px solid var(--line); border-radius: 14px 0 14px 5px; }
 .shot-note b { color: var(--fg-strong); }
 .shot-note svg { flex: none; width: 18px; height: 18px; fill: none; stroke: var(--accent); stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
-/* architecture diagram over the open sheet (presenter mode); the PNG is transparent, so it sits on white */
-.viewer-diagram { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; padding: 18px; background: rgba(20, 24, 27, .55); animation: viewerIn .25s var(--ease); }
+/* architecture diagram over the stage and an open sheet; the PNG is transparent, so it sits on white */
+.viewer-diagram { position: absolute; inset: 0; z-index: 16; display: grid; place-items: center; padding: 18px; background: rgba(20, 24, 27, .55); animation: viewerIn .25s var(--ease); }
 .viewer-diagram[hidden] { display: none; }
 .vd-card { position: relative; margin: 0; max-width: 100%; max-height: 100%; display: flex; padding: 22px 26px; background: #fff; border-radius: var(--card); box-shadow: 0 18px 48px rgba(0, 0, 0, .4); }
 .vd-card img { display: block; max-width: 100%; max-height: calc(100vh - 220px); width: auto; height: auto; object-fit: contain; }
@@ -366,6 +366,8 @@ kbd { font: inherit; font-size: 11px; padding: 0 5px; border: 1px solid var(--li
 /* scrolling layout (phones, short windows): viewer takes the whole screen */
 @media (max-width: 899px), (max-height: 559px) {
   .viewer { position: fixed; inset: auto 0 0 0; top: 0; z-index: 15; }
+  .viewer-diagram { position: fixed; z-index: 40; }
+  .vd-card img { max-height: calc(100vh - 80px); }
 }
 
 /* ---------- narrower and shorter screens ---------- */

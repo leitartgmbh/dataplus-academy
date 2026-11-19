@@ -102,7 +102,7 @@
     var q = "", hint = l.hint || "";
     if (isQlik) {
       q = ' data-q="' + targets.length + '"';
-      targets.push({ label: l.label, url: l.url, shot: l.shot || "", shotCaption: l.shotCaption || "", hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1, diagram: block.diagram || null });
+      targets.push({ label: l.label, url: l.url, shot: l.shot || "", shotCaption: l.shotCaption || "", hint: hint, block: blockIndex, prompts: block.prompts ? promptIndex(block.prompts) : -1 });
       hint = !presenterMode ? (hint ? hint.replace(/^Live sheet$/, "Qlik sheet") + " · screenshot" : "Screenshot") :
         hint ? hint + (canEmbed ? " · Qlik" : " · opens Qlik") : (canEmbed ? "Qlik sheet" : "Opens Qlik in a new tab");
     } else if (!hint) {
@@ -389,6 +389,7 @@
     k = Math.max(0, Math.min(views.length - 1, k));
     var changed = k !== current;
     if (!opts.keepViewer) closeViewer();
+    if (changed) diagramOpen = false;
     current = k;
     $$(".view", main).forEach(function (el, i) {
       var on = i === k;
@@ -413,6 +414,7 @@
       try { history.replaceState(null, "", id ? base + "#" + id : base + (editions.length > 1 && S ? "#" + S.id : "")); } catch (e) { /* file:// in some browsers */ }
     }
     if (window.innerWidth < 900 || window.innerHeight < 560) window.scrollTo(0, 0);
+    renderDiagram();
   }
   function reduced() { return window.matchMedia("(prefers-reduced-motion: reduce)").matches; }
 
@@ -554,8 +556,6 @@
 
     promptBtn.hidden = t.prompts < 0;
     renderViewerPrompts();
-    diagramBtn.hidden = !(presenterMode && t.diagram);
-    renderViewerDiagram();
     measureTop();
     $(".top").classList.remove("is-settled");
     setEventsMenu(false);
@@ -577,11 +577,16 @@
     vPrompts.setAttribute("aria-hidden", String(!show));
   }
 
-  // architecture diagram over the open sheet: presenter mode, blocks with a diagram
-  function renderViewerDiagram() {
-    var t = targets[currentQ];
-    var d = t && presenterMode && t.diagram;
+  // architecture diagram: blocks with `diagram` get a button in the chip row (any mode, sheet open or not);
+  // the image is laid over the stage, including an open sheet
+  function currentDiagram() {
+    var v = views[current];
+    return v && v.kind === "block" && S && S.blocks[v.block] ? S.blocks[v.block].diagram || null : null;
+  }
+  function renderDiagram() {
+    var d = currentDiagram();
     var show = !!d && diagramOpen;
+    diagramBtn.hidden = !d;
     var label = (show ? "Hide " : "Show ") + ((d && d.title) || "diagram").toLowerCase();
     diagramBtn.setAttribute("aria-pressed", String(show));
     diagramBtn.setAttribute("aria-label", label);
@@ -592,7 +597,7 @@
     }
     vDiagram.hidden = !show;
   }
-  function setDiagram(on) { diagramOpen = on; renderViewerDiagram(); if (!on && viewerOpen()) diagramBtn.focus({ preventScroll: true }); }
+  function setDiagram(on) { diagramOpen = on; renderDiagram(); if (!on) diagramBtn.focus({ preventScroll: true }); }
 
   // header height for the fold-away animation while a sheet is open
   // after the header has slid back in, stop clipping it (the events dropdown needs to overflow)
@@ -618,7 +623,6 @@
     $("#viewerNewTab").hidden = true;
     $("#viewerClose").hidden = true;
     promptBtn.hidden = true;
-    diagramOpen = false; vDiagram.hidden = true; diagramBtn.hidden = true;
     if (lastOpener && document.contains(lastOpener)) lastOpener.focus({ preventScroll: true });
   }
 
@@ -773,7 +777,7 @@
     if (!lb.hidden) { if (key === "Escape") { e.preventDefault(); closeLightbox(); } return; }
     if (!eventsMenu.hidden && key === "Escape") { e.preventDefault(); setEventsMenu(false); eventsBtn.focus(); return; }
 
-    if (viewerOpen() && diagramOpen && key === "Escape") { e.preventDefault(); setDiagram(false); return; }
+    if (diagramOpen && key === "Escape") { e.preventDefault(); setDiagram(false); return; }
     if (viewerOpen() && key === "Escape") { e.preventDefault(); closeViewer(); return; }
     // all other keys work as without the viewer (navigating closes it)
 
