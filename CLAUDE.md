@@ -166,6 +166,7 @@ Dark by default, light variant via `prefers-color-scheme` and `data-theme`.
   "Save the date" band, `prefers-reduced-motion` respected.
 - Logo: `assets/logos/logo-weiss.png` on dark, `logo-grau.png` on light ("data plus · a leitart
   solution"). The webinar page also has an inline SVG version of the logo (in `reference/`).
+  Logo + "Academy" link to https://www.leitart.de/en/data-plus-academy (same tab, since 2026-11-19).
 - Mobile: works at phone width, 16 px side gutters, no horizontal scroll.
 
 ## Workflow: local first, then publish
