@@ -134,7 +134,8 @@
                 tag: { label: "New", color: "c2" },
                 title: "Hello Data+: publish objects to the origin sheet",
                 links: [
-                  { kind: "link", label: "Become an early tester", url: WAITLIST + "/?program=hello-dataplus", hint: "waitlist.leitart.de", primary: true }
+                  { kind: "link", label: "Become an early tester", url: WAITLIST + "/?program=hello-dataplus", hint: "waitlist.leitart.de", primary: true },
+                  { kind: "link", label: "Open Hello Data+", url: "https://demo-leitart.de.qlikcloud.com/sense/app/9affefdb-cfcc-4a81-935b-8ebce135766b/sheet/9cab7163-71f8-4065-a7a8-6348b469badc/state/analysis", hint: "demo tenant · presenter only", presenter: true }
                 ]
               },
               {
@@ -144,7 +145,8 @@
                 title: "Data+ Cloud Admin Console",
                 links: [
                   { kind: "link", label: "Become an early tester", url: WAITLIST + "/?program=cloud-admin", hint: "waitlist.leitart.de", primary: true },
-                  { kind: "qlik", label: "Tenant Cleanup", url: sheet("249acb4b-031c-4811-aaee-554f0d2c5cdb", "ZrnYes"), hint: "Live sheet", shot: SHOT + "tenant-cleanup.png" }
+                  { kind: "qlik", label: "Tenant Cleanup", url: sheet("249acb4b-031c-4811-aaee-554f0d2c5cdb", "ZrnYes"), hint: "Live sheet", shot: SHOT + "tenant-cleanup.png", presenter: true },
+                  { kind: "link", label: "Open Admin Console", url: "https://demo-leitart.de.qlikcloud.com/sense/app/33d79353-0dce-4611-a35c-5ae9029bcff2/sheet/08a9cc97-6921-45d5-b3c3-90baebc963a3/state/analysis?dataplus-admin-page=me-and-my-tenant,my-tenant", hint: "demo tenant · presenter only", presenter: true }
                 ]
               },
               {
@@ -186,15 +188,15 @@
               items: [
                 {
                   title: "Create a planning scenario",
-                  text: 'Create a new scenario "Data+ Academy" as a copy of the existing scenario "Forecast 2027" and apply an overall uplift of 10% to all values under COGS, an uplift of 8% on OPEX and 9% on EBT. As distribution type set "Percentage" for all rows as a default.'
+                  text: "Create a new scenario “Data+ Academy” as a copy of “Forecast 2027”. Apply an uplift of 10% on COGS and 8% on OPEX, and raise Revenue so that EBT stays the same as in “Forecast 2027”. As distribution type set “Percentage” for all rows."
                 },
                 {
                   title: "Check plausibility",
-                  text: "Make a plausibility check: on one hand check for outliers, on the other compare the numbers to the original scenario for being too far off. Put your findings as cell comments."
+                  text: "Make a plausibility check of “Data+ Academy”: check for outliers, and compare the numbers to “Forecast 2027” for deviations beyond the planned uplifts. Put your findings as cell comments."
                 },
                 {
                   title: "Compare scenarios",
-                  text: 'Compare the scenario "Data+ Academy" with "Forecast 2027". Which P&L positions drive the difference, and in which months does it build up?'
+                  text: "Compare the scenario “Data+ Academy” with “Forecast 2027”. Which P&L positions drive the difference, and in which months does it build up?"
                 }
               ]
             }

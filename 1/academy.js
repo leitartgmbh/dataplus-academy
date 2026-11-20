@@ -142,10 +142,11 @@
   }
   function figureHtml(f, blockIndex, block) {
     if (f.kind === "list") return listCardHtml(f);
-    return '<figure class="feature">' +
+    // the tag sits on the screenshot (top left), not in the caption
+    return '<figure class="feature">' + tagHtml(f.tag) +
       '<button type="button" class="zoom" aria-label="Enlarge screenshot: ' + esc(f.title || f.alt) + '">' +
       '<img src="' + esc(f.src) + '" alt="' + esc(f.alt || "") + '"' + (f.width ? ' width="' + f.width + '" height="' + f.height + '"' : "") + "></button>" +
-      "<figcaption><div>" + tagHtml(f.tag) + (f.title ? "<h4>" + esc(f.title) + "</h4>" : "") + (f.text ? "<p>" + esc(f.text) + "</p>" : "") + "</div>" +
+      "<figcaption><div>" + (f.title ? "<h4>" + esc(f.title) + "</h4>" : "") + (f.text ? "<p>" + esc(f.text) + "</p>" : "") + "</div>" +
       linksHtml(f.links, blockIndex, block) + "</figcaption></figure>";
   }
 

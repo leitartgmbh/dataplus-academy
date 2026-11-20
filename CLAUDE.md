@@ -230,7 +230,12 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
     `promptPanel` and `warsaw-cfo.prompts.js`).
   - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `00ea92a4…`, sheet `PrNp`).
   - New in the kitchen / Cloud Admin Console → **Tenant Cleanup** sheet (app `249acb4b…`,
-    sheet `ZrnYes`) next to the screenshot + waitlist CTA.
+    sheet `ZrnYes`, presenter only since 2026-11-20) next to the screenshot + waitlist CTA, plus a presenter-only link
+    "Open Admin Console" to the demo tenant (`demo-leitart.de.qlikcloud.com`, app `33d79353…`,
+    `?dataplus-admin-page=me-and-my-tenant,my-tenant`), new tab (since 2026-11-20).
+  - New in the kitchen / Hello Data+ → presenter-only link "Open Hello Data+" to the demo tenant
+    (app `9affefdb…`, sheet `9cab7163…`), new tab (since 2026-11-20).
+    The figure tags ("New") sit on the screenshot, top left (since 2026-11-20).
   - Data Quality extension → screenshot only (viewer app is in a personal space).
 
 ## Conventions
