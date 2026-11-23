@@ -170,11 +170,8 @@
             chip: "Planning with MCP",
             text: "How Claude supports budgeting and forecasting on top of Qlik apps with Data+ writeback. Claude works on the MCP Planning app; every step it takes lands in the Agent Log.",
             links: [
-              { kind: "qlik", label: "Home", url: sheet(PLANNING, "hKMaP"), hint: "Start page", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
-              { kind: "qlik", label: "Scenario Management", url: sheet(PLANNING, "f179d595-5275-460e-9f9f-88cf7bb20686"), hint: "Create and manage scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
-              { kind: "qlik", label: "Planning", url: sheet(PLANNING, "f7bcc9ea-a33c-47a2-a165-acf1079254d3"), hint: "P&L plan per scenario", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
-              { kind: "qlik", label: "Analysis", url: sheet(PLANNING, "5672467e-5489-47a6-9e57-19e5a400c3ea"), hint: "Compare two scenarios", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" },
-              { kind: "qlik", label: "Agent Log", url: sheet(PLANNING, "jmVMUA"), hint: "What Claude changed and why", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" }
+              /* one entry point; Qlik's own sheet navigation reaches Home, Planning, Analysis, Agent Log */
+              { kind: "qlik", label: "Open App", url: sheet(PLANNING, "f179d595-5275-460e-9f9f-88cf7bb20686"), hint: "MCP Planning · Scenario Management", shot: SHOT + "planning.png", shotCaption: "MCP Planning app" }
             ],
             /* diagram button in the chip row (any mode, sheet open or not) lays this over the stage */
             diagram: {

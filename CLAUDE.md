@@ -224,8 +224,9 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
   `https://<uuid>.frame.claudeusercontent.com` inside `https://claude.ai`, and its own CSP
   blocks the Qlik iframe with `frame-src`. No Qlik tenant CSP entry can fix that.
 - **Qlik targets per block:**
-  - Financial Planning with MCP → MCP Planning 2.0, **all 5 sheets** as separate links
-    (Home, Scenario Management, Planning, Analysis, Agent Log), plus a **copy-ready Claude
+  - Financial Planning with MCP → MCP Planning 2.0, **one link "Open App"** to the Scenario
+    Management sheet (since 2026-11-23; before: all 5 sheets as separate links; the other
+    sheets are reached via Qlik's own sheet navigation), plus a **copy-ready Claude
     prompt panel** (prompts from `../customer-mashups/pages/qlik-data-in-action.js`
     `promptPanel` and `warsaw-cfo.prompts.js`).
   - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `00ea92a4…`, sheet `PrNp`).
