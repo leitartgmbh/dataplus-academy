@@ -123,7 +123,7 @@
             audience: true
           },
           {
-            from: 3, minutes: 12,
+            from: 3, minutes: 11,
             tag: { label: "Product news", color: "c1" },
             title: "New in the kitchen",
             text: "The latest additions across the Data+ Extension family, shown live in Qlik, starting with sheet publishing in Hello Data+ and the new Cloud Admin Console, plus what we are still working on.",
@@ -164,7 +164,7 @@
             ]
           },
           {
-            from: 15, minutes: 12,
+            from: 14, minutes: 12,
             tag: { label: "AI in practice", color: "c2" },
             title: "Financial Planning with MCP",
             chip: "Planning with MCP",
@@ -185,21 +185,21 @@
               items: [
                 {
                   title: "Create a planning scenario",
-                  text: "Create a new scenario “Data+ Academy” as a copy of “Forecast 2027”. Apply an uplift of 10% on COGS and 8% on OPEX, and raise Revenue so that EBT stays the same as in “Forecast 2027”. As distribution type set “Percentage” for all rows."
+                  text: 'Create scenario "Data+ Academy" with ID _ as a copy of "Forecast 2027" and increase all costs by 10%. Write without asking for confirmation. Answer in english.'
                 },
                 {
-                  title: "Check plausibility",
-                  text: "Make a plausibility check of “Data+ Academy”: check for outliers, and compare the numbers to “Forecast 2027” for deviations beyond the planned uplifts. Put your findings as cell comments."
+                  title: "Check deviations",
+                  text: 'Check "Data+ Academy" against "Forecast 2027": comment only cells that deviate beyond the planned uplift. Use only the standard tools, not the scenario_analysis tools.'
                 },
                 {
                   title: "Compare scenarios",
-                  text: "Compare the scenario “Data+ Academy” with “Forecast 2027”. Which P&L positions drive the difference, and in which months does it build up?"
+                  text: 'Compare the scenario "Data+ Academy" with "Forecast 2027". Which P&L positions drive the difference, and in which months does it build up?'
                 }
               ]
             }
           },
           {
-            from: 27, minutes: 10,
+            from: 26, minutes: 11,
             tag: { label: "Example: Shopfloor App", color: "c3" },
             title: "Data+ Flow",
             chip: "Data+ Flow",

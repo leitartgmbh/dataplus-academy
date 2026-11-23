@@ -87,9 +87,9 @@ Christof Schwarz (Moderator), Ahmad Abou Ezzah (Data+ Specialist), Leon Schmidt 
 | Offset | Min | Block | Tag | Content / links |
 |---|---|---|---|---|
 | 0:00 | 3 | Welcome | (frame) | Topics, how to send questions |
-| 0:03 | 12 | New in the kitchen | Product news | Three cards, in this order: Hello Data+ publish objects to origin sheet (`hello-dataplus-publish.webp`), Data+ Cloud Admin Console (`cloud-admin-console.webp`, CTA "Become an early tester" → https://waitlist.leitart.de, Tenant Cleanup sheet), "Still working on …" list: Data Quality extension, Data Lineage, Language Switcher, 3D Models, Landing Page (Data+ Hub). The Data Quality screenshot moved to event #2 (2026-11-18). |
-| 0:15 | 12 | Financial Planning with MCP (renamed 2026-11-18, was "with the help of Claude") | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
-| 0:27 | 10 | Data+ Flow | Example: Shopfloor App | Data+ Flow demonstrated on the example of the Shopfloor App (renamed 2026-11-18, was "Shopfloor App under the hood" / Data+ Forms) |
+| 0:03 | 11 | New in the kitchen | Product news | Three cards, in this order: Hello Data+ publish objects to origin sheet (`hello-dataplus-publish.webp`), Data+ Cloud Admin Console (`cloud-admin-console.webp`, CTA "Become an early tester" → https://waitlist.leitart.de, Tenant Cleanup sheet), "Still working on …" list: Data Quality extension, Data Lineage, Language Switcher, 3D Models, Landing Page (Data+ Hub). The Data Quality screenshot moved to event #2 (2026-11-18). |
+| 0:14 | 12 | Financial Planning with MCP (renamed 2026-11-18, was "with the help of Claude") | AI in practice | Budgeting/forecasting on Qlik apps with Data+ writeback |
+| 0:26 | 11 | Data+ Flow | Example: Shopfloor App | Data+ Flow demonstrated on the example of the Shopfloor App (renamed 2026-11-18, was "Shopfloor App under the hood" / Data+ Forms) |
 | 0:37 | 8 | Q&A | (frame) | Live questions |
 | — | — | Wrap-up (chip 6, `#next`) | — | Save the date for session 2 + "How to engage": Save your seat (HubSpot form for Office Hours 02 · 16 Dec 2026, also as QR code), dataplusextension.com, wiki.leitart.de, leitart.de, YouTube @Leitart. QR is drawn in the page with qrcode-generator 1.4.4 from cdnjs (no QR if offline; the link still works). |
 
