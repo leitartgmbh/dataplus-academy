@@ -229,7 +229,8 @@ stays blank; links still work. Do not run this and customer-mashups at the same 
     sheets are reached via Qlik's own sheet navigation), plus a **copy-ready Claude
     prompt panel** (prompts from `../customer-mashups/pages/qlik-data-in-action.js`
     `promptPanel` and `warsaw-cfo.prompts.js`).
-  - Data+ Flow (example: Shopfloor App) → **Quality Gate** sheet (app `00ea92a4…`, sheet `PrNp`).
+  - Data+ Flow (example: Shopfloor App) → **Quality Gate** link (app `00ea92a4…`, sheet
+    `7a88c0ce-b173-4c8e-b2f7-bdec8a72bee8` since 2026-11-23; before: sheet `PrNp`).
   - New in the kitchen / Cloud Admin Console → **Tenant Cleanup** sheet (app `249acb4b…`,
     sheet `ZrnYes`, presenter only since 2026-11-20) next to the screenshot + waitlist CTA, plus a presenter-only link
     "Open Admin Console" to the demo tenant (`demo-leitart.de.qlikcloud.com`, app `33d79353…`,

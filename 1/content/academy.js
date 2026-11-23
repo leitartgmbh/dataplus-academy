@@ -205,7 +205,7 @@
             chip: "Data+ Flow",
             text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, with the Quality Gate for visual inspection and quality review, right inside Qlik.",
             links: [
-              { kind: "qlik", label: "Quality Gate", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/PrNp/", hint: "Live sheet", shot: SHOT + "quality-gate.png" }
+              { kind: "qlik", label: "Quality Gate", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/7a88c0ce-b173-4c8e-b2f7-bdec8a72bee8/state/analysis", hint: "Live sheet", shot: SHOT + "quality-gate.png" }
             ]
           },
           {
