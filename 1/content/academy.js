@@ -203,7 +203,7 @@
             tag: { label: "Example: Shopfloor App", color: "c3" },
             title: "Data+ Flow",
             chip: "Data+ Flow",
-            text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, with the Quality Gate for visual inspection and quality review, right inside Qlik.",
+            text: "Data+ Flow, demonstrated on the example of the Shopfloor App: a walk through its building blocks, from recording a shopfloor event (near miss, collision, leak) right inside Qlik to the dashboard that maps every event on the plant layout.",
             links: [
               { kind: "qlik", label: "Shopfloor App", url: "https://leitart.eu.qlikcloud.com/sense/app/00ea92a4-a047-4189-9bd6-6981982d7b5e/sheet/7a88c0ce-b173-4c8e-b2f7-bdec8a72bee8/state/analysis", hint: "Live sheet", shot: SHOT + "shopfloor-events.png" }
             ]
