@@ -185,11 +185,11 @@
               items: [
                 {
                   title: "Create a planning scenario",
-                  text: 'Create scenario "Data+ Academy" with ID _ as a copy of "Forecast 2027" and increase all costs by 10%. Write without asking for confirmation. Answer in english.'
+                  text: 'Create scenario "Data+ Academy" with ID 58 as a copy of "Forecast 2027". From July, increase revenue by 5% and all costs by 10%, and round all values to full thousands. Write without asking for confirmation. Answer in english.'
                 },
                 {
                   title: "Check deviations",
-                  text: 'Check "Data+ Academy" against "Forecast 2027": comment only cells that deviate beyond the planned uplift. Use only the standard tools, not the scenario_analysis tools.'
+                  text: 'Check "Data+ Academy" against "Forecast 2027": comment only cells that deviate beyond the planned uplift. Use only the standard tools, not the scenario_analysis tools. Write in english and without asking for confirmation.'
                 },
                 {
                   title: "Compare scenarios",
