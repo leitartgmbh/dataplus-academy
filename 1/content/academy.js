@@ -9,7 +9,9 @@
      start      ISO time with offset ("2026-11-24T16:00:00+01:00") or null
                 (null: date only, no countdown and no live-minute tracker)
      duration   minutes
-     recording  URL once the recording exists, else null
+     recording  URL of one recording of the whole session, else null
+                (recordings per block: block.recordings, or the event's entry in ../assets/events.js)
+     leadAfter  lead shown on the overview once the session is over (default: lead)
      url        optional page for a later edition (e.g. "../2/"), linked from "Save the date"
      format     short pills for the "What is the format" row on the overview
      engage     { title, links, teaser, contact } for the wrap-up view; a link with qr: true also gets
@@ -33,6 +35,7 @@
                      presenter: true → only shown with ?presenter=1 in the address
                        qlik → full-screen modal where embedding works, else new tab
                        link → new tab
+     recordings      [{ title, url }] videos of this block (also read from ../assets/events.js)
      prompts         { title, note, items: [{ title, text }] }  copy-ready prompts
      presenters      true = show all session presenters in this block,
                      or a list of ids, e.g. ["leon-schmidt"]
@@ -69,6 +72,7 @@
         title: "What's cooking in",
         titleAccent: "Data+",
         lead: "45 minutes on what's new across the Data+ Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. The session is held in English.",
+        leadAfter: "On 24 November we showed what's new across the Data+ Extension family: planning with MCP, and Data+ Flow demonstrated on the example of a real shopfloor app. Missed it? Watch the recordings, block by block.",
         date: "2026-11-24",
         start: "2026-11-24T16:00:00+01:00",
         duration: 45,

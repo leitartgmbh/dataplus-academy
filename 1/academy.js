@@ -116,6 +116,27 @@
       (isQlik ? ' title="' + esc(!presenterMode ? "Shows a screenshot of the Qlik sheet" : canEmbed ? "Opens full screen. Ctrl/Cmd-click for a new tab." : "Opens in Qlik (login required)") + '"' : "") + ">" +
       '<span class="ico">' + icon + '</span><span class="lbl"><b>' + esc(l.label) + "</b>" + (hint ? "<small>" + esc(hint) + "</small>" : "") + "</span></a>";
   }
+  // recordings of a block: block.recordings in the content file, plus this event's entry in
+  // ../assets/events.js (shared with the next event's page), matched by block number (1 = first)
+  function recordingsFor(i) {
+    var b = S.blocks[i] || {};
+    var ev = (window.ACADEMY_EVENTS || []).filter(function (e) { return e.folder === currentFolder(); })[0];
+    var shared = ((ev && ev.recordings) || []).filter(function (r) { return r.block === i + 1; });
+    return (b.recordings || []).concat(shared);
+  }
+  function recordingCount() {
+    return S.blocks.reduce(function (n, b, i) { return n + recordingsFor(i).length; }, 0);
+  }
+  function recordingLinks(i) {
+    var list = recordingsFor(i), prefix = (S.blocks[i].title || "") + ": ";
+    return list.map(function (r) {
+      // "New in the kitchen: Hello Data+" → "Hello Data+" (the block title is the heading right above)
+      var short = r.title && r.title.indexOf(prefix) === 0 ? r.title.slice(prefix.length) : r.title;
+      return { kind: "recording", label: list.length > 1 ? short : "Watch the recording", url: r.url, hint: list.length > 1 ? "Recording" : r.title ? r.title + " · recording" : "Recording", primary: true };
+    });
+  }
+  function isPast() { return !!S && endOf(S) < Date.now(); }
+
   function linksHtml(list, blockIndex, block, cls) {
     list = (list || []).filter(visible);
     if (!list.length) return "";
@@ -171,8 +192,9 @@
   function audienceHtml() { return metaHtml(false); }
 
   function overviewHtml(t0) {
+    var past = isPast(), recs = recordingCount();
     var facts = [
-      t0 ? ["When", fmt({ weekday: "short", day: "numeric", month: "short" }, dayOf(S)) + " · " + fmtClock(t0, true)] : ["Date", fmtDate(S)],
+      t0 ? [past ? "Held on" : "When", fmt({ weekday: "short", day: "numeric", month: "short" }, dayOf(S)) + " · " + fmtClock(t0, true)] : ["Date", fmtDate(S)],
       S.duration ? ["Duration", S.duration + " min"] : null,
       S.language ? ["Language", S.language] : null
     ].filter(Boolean).map(function (f) {
@@ -183,11 +205,16 @@
       return '<a href="#' + esc(e.id) + '"' + (e === S ? ' aria-current="page"' : "") + ">" + esc(fmtShortDate(e)) + " · " + esc(fullTitle(e)) + "</a>";
     }).join("") + "</nav>" : "";
 
+    // with recordings, each row gets a play button on the right (one video: opens it; several: the block view)
     var rows = S.blocks.map(function (b, i) {
-      return '<li><button type="button" class="ov-row' + (b.frame ? " frame" : "") + '" data-view="' + (i + 1) + '" style="--bc:' + colorVar(blockColor(b)) + '">' +
+      var r = recordingsFor(i);
+      var play = !recs ? "" : !r.length ? '<span class="ov-rec none" aria-hidden="true"></span>' :
+        r.length === 1 ? '<a class="ov-rec" href="' + esc(r[0].url) + '" target="_blank" rel="noopener" title="Watch the recording: ' + esc(r[0].title || b.title) + '">' + ICON.play + "<span>Watch</span></a>" :
+        '<button type="button" class="ov-rec" data-view="' + (i + 1) + '" title="' + r.length + ' recordings">' + ICON.play + "<span>" + r.length + " videos</span></button>";
+      return "<li>" + '<button type="button" class="ov-row' + (b.frame ? " frame" : "") + '" data-view="' + (i + 1) + '" style="--bc:' + colorVar(blockColor(b)) + '">' +
         '<span class="tm">' + offset(b.from) + "<small>" + b.minutes + " min</small></span>" +
         '<span class="ti">' + (b.tag ? "<small>" + esc(b.tag.label) + "</small>" : "") + esc(b.title) + "</span>" +
-        '<span class="k">' + (i < 9 ? "<kbd>" + (i + 1) + "</kbd>" : "") + "</span></button></li>";
+        '<span class="k">' + (i < 9 ? "<kbd>" + (i + 1) + "</kbd>" : "") + "</span></button>" + play + "</li>";
     }).join("");
 
     var scale = "Times are minutes from the start" + (t0 ? ", clock times " + fmtClock(t0, true).split(" ").pop() : "") +
@@ -198,10 +225,11 @@
     return '<div class="ov">' +
       '<div class="ov-intro">' + (S.eyebrow ? '<div class="eyebrow">' + esc(S.eyebrow) + "</div>" : "") +
       "<h1>" + esc(S.title) + (S.titleAccent ? " <span>" + esc(S.titleAccent) + "</span>" : "") + "</h1>" +
-      (S.lead ? '<p class="lead">' + esc(S.lead) + "</p>" : "") +
+      ((past && S.leadAfter) || S.lead ? '<p class="lead">' + esc((past && S.leadAfter) || S.lead) + "</p>" : "") +
       '<div class="facts">' + facts + "</div>" + editionNav + "</div>" +
-      '<div class="ov-agenda"><div class="eyebrow">Agenda · ' + S.blocks.length + " blocks, " + (S.duration || "") + " min</div>" +
-      '<div class="scale">' + esc(scale) + '</div><ol class="ov-list">' + rows + "</ol></div>" +
+      '<div class="ov-agenda"><div class="eyebrow">Agenda · ' + S.blocks.length + " blocks, " + (S.duration || "") + " min" +
+      (recs ? " · " + recs + (recs === 1 ? " recording" : " recordings") : "") + "</div>" +
+      '<div class="scale">' + esc(scale) + '</div><ol class="ov-list' + (recs ? " with-rec" : "") + '">' + rows + "</ol></div>" +
       aud + "</div>";
   }
 
@@ -238,16 +266,18 @@
     var figs = b.figures || [];
     var hasPrompts = !!b.prompts;
     var body = "", headLinks = "";
+    var recs = recordingLinks(i), withRecs = recs.concat(b.links || []);
     if (figs.length) {
       body = '<div class="bv-body figs" style="--cols:' + Math.min(figs.length, 3) + '">' + figs.map(function (f) { return figureHtml(f, i, b); }).join("") + "</div>";
-      headLinks = linksHtml(b.links, i, b);
+      headLinks = linksHtml(withRecs, i, b);
     } else if (hasPrompts) {
       body = '<div class="bv-body split">' + (linksHtml(b.links, i, b, "grid") || "<div></div>") + promptsHtml(b.prompts) + "</div>";
+      headLinks = linksHtml(recs, i, b);
     } else if (blockPresenters(b).length) {
       body = peopleHtml(blockPresenters(b));
-      headLinks = linksHtml(b.links, i, b);
+      headLinks = linksHtml(withRecs, i, b);
     } else {
-      headLinks = linksHtml(b.links, i, b);
+      headLinks = linksHtml(withRecs, i, b);
     }
     var solo = !body;
     return '<div class="bv' + (b.frame ? " frame" : "") + (solo ? " solo" : "") + '" style="--bc:' + colorVar(blockColor(b)) + '">' +
@@ -443,9 +473,13 @@
     var next = nextSessionAfter(S);
     var nextTxt = next ? " · Next: " + fmtShortDate(next) : "";
     var ended = function () {
+      var recs = recordingCount();
       if (S.recording) {
         setCount("Status", '<a href="' + esc(S.recording) + '" target="_blank" rel="noopener">Watch the recording</a>', true);
         pillText.textContent = "Recording available" + nextTxt;
+      } else if (recs) {
+        setCount("Recordings", recs + (recs === 1 ? " video" : " videos"));
+        pillText.textContent = "Recordings available" + nextTxt;
       } else {
         setCount("Status", "Ended");
         pillText.textContent = "Recording follows" + nextTxt;

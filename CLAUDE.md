@@ -56,7 +56,11 @@ previous folder. Things shared by all events live in `assets/` at the root.
 index.html              series root: forwards to the current edition (change "1/" when #2 goes live)
 assets/                 shared by all events
   people.js             presenter registry: id → name, job title, photo
-  events.js             list of event folders (label, title, date, status) for the header dropdown
+  events.js             list of event folders (label, title, date, status) for the header dropdown,
+                        plus `recordings` per past event ({ block, title, url }): play buttons on
+                        that event's overview/block views and "Missed it?" links on the next event's page
+                        (since 2026-11-26; videos in Christof's OneDrive videos_dataplus_academy/,
+                        public only via "Anyone with the link" share links)
   people/               presenter photos, <id>.jpg (square; missing → initials)
   logos/                logo-weiss.png (dark bg), logo-grau.png (light bg)
   fonts/                Montserrat 400/600/700 woff2
@@ -70,6 +74,8 @@ assets/                 shared by all events
 reference/              webinar-2026-11.html (source content + look, not part of the portal)
 ```
 
+When branching, keep the "Missed Office Hours 01? Watch the recordings" links of the current
+`2/index.html` (e.g. in the welcome block or wrap-up).
 Branching #2 (planned for about 2026-11-25): copy `index.html`, `academy.css`, `academy.js`
 from `1/` into `2/` (replacing the "Coming soon" page) but **keep** `2/content/academy.js`
 (already a draft with the Data Quality block, times and order still placeholders) and
