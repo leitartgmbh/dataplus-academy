@@ -59,8 +59,10 @@ assets/                 shared by all events
   events.js             list of event folders (label, title, date, status) for the header dropdown,
                         plus `recordings` per past event ({ block, title, url }): play buttons on
                         that event's overview/block views and "Missed it?" links on the next event's page
-                        (since 2026-11-26; videos in Christof's OneDrive videos_dataplus_academy/,
-                        public only via "Anyone with the link" share links)
+                        (since 2026-11-26; videos in Christof's OneDrive videos_dataplus_academy/).
+                        Public entry point = `recordingsUrl`, the folder's "Anyone" share link;
+                        every Watch button opens it and names the file. Plain file paths give
+                        visitors 403 (they only work after the folder link was opened).
   people/               presenter photos, <id>.jpg (square; missing → initials)
   logos/                logo-weiss.png (dark bg), logo-grau.png (light bg)
   fonts/                Montserrat 400/600/700 woff2

@@ -118,12 +118,18 @@
   }
   // recordings of a block: block.recordings in the content file, plus this event's entry in
   // ../assets/events.js (shared with the next event's page), matched by block number (1 = first)
-  function recordingsFor(i) {
-    var b = S.blocks[i] || {};
-    var ev = (window.ACADEMY_EVENTS || []).filter(function (e) { return e.folder === currentFolder(); })[0];
-    var shared = ((ev && ev.recordings) || []).filter(function (r) { return r.block === i + 1; });
-    return (b.recordings || []).concat(shared);
+  // without an own url a video opens the event's public recordings folder (recordingsUrl)
+  function thisEvent() {
+    return (window.ACADEMY_EVENTS || []).filter(function (e) { return e.folder === currentFolder(); })[0] || {};
   }
+  function recordingsFor(i) {
+    var b = S.blocks[i] || {}, ev = thisEvent();
+    var shared = (ev.recordings || []).filter(function (r) { return r.block === i + 1; });
+    return (b.recordings || []).concat(shared).map(function (r) {
+      return Object.assign({}, r, { url: r.url || ev.recordingsUrl, inFolder: !r.url });
+    }).filter(function (r) { return r.url; });
+  }
+  function recTitle(r) { return r.inFolder && r.file ? "Opens the recordings folder: " + r.file : "Watch the recording" + (r.title ? ": " + r.title : ""); }
   function recordingCount() {
     return S.blocks.reduce(function (n, b, i) { return n + recordingsFor(i).length; }, 0);
   }
@@ -132,7 +138,9 @@
     return list.map(function (r) {
       // "New in the kitchen: Hello Data+" → "Hello Data+" (the block title is the heading right above)
       var short = r.title && r.title.indexOf(prefix) === 0 ? r.title.slice(prefix.length) : r.title;
-      return { kind: "recording", label: list.length > 1 ? short : "Watch the recording", url: r.url, hint: list.length > 1 ? "Recording" : r.title ? r.title + " · recording" : "Recording", primary: true };
+      // in the folder: the hint names the file to click there
+      var hint = r.inFolder && r.file ? "Video " + r.file.replace(/\.[a-z0-9]+$/i, "") : list.length > 1 ? "Recording" : r.title ? r.title + " · recording" : "Recording";
+      return { kind: "recording", label: list.length > 1 ? short : "Watch the recording", url: r.url, hint: hint, primary: true };
     });
   }
   function isPast() { return !!S && endOf(S) < Date.now(); }
@@ -209,7 +217,7 @@
     var rows = S.blocks.map(function (b, i) {
       var r = recordingsFor(i);
       var play = !recs ? "" : !r.length ? '<span class="ov-rec none" aria-hidden="true"></span>' :
-        r.length === 1 ? '<a class="ov-rec" href="' + esc(r[0].url) + '" target="_blank" rel="noopener" title="Watch the recording: ' + esc(r[0].title || b.title) + '">' + ICON.play + "<span>Watch</span></a>" :
+        r.length === 1 ? '<a class="ov-rec" href="' + esc(r[0].url) + '" target="_blank" rel="noopener" title="' + esc(recTitle(r[0])) + '">' + ICON.play + "<span>Watch</span></a>" :
         '<button type="button" class="ov-rec" data-view="' + (i + 1) + '" title="' + r.length + ' recordings">' + ICON.play + "<span>" + r.length + " videos</span></button>";
       return "<li>" + '<button type="button" class="ov-row' + (b.frame ? " frame" : "") + '" data-view="' + (i + 1) + '" style="--bc:' + colorVar(blockColor(b)) + '">' +
         '<span class="tm">' + offset(b.from) + "<small>" + b.minutes + " min</small></span>" +
@@ -468,7 +476,12 @@
     if (!S) return;
     var lbl = $("#countLabel"), cd = $("#countdown"), pill = $("#status"), pillText = $("#status span");
     var now = Date.now(), live = -1, mins = null;
-    var setCount = function (l, v, html) { if (!lbl) return; lbl.textContent = l; if (html) cd.innerHTML = v; else cd.textContent = v; };
+    // only touch the DOM on change: rebuilding a link every second can swallow a click on it
+    var setCount = function (l, v, html) {
+      if (!lbl || cd.dataset.v === l + "|" + v) return;
+      cd.dataset.v = l + "|" + v; lbl.textContent = l;
+      if (html) cd.innerHTML = v; else cd.textContent = v;
+    };
     pill.classList.remove("is-live", "is-soon");
     var next = nextSessionAfter(S);
     var nextTxt = next ? " · Next: " + fmtShortDate(next) : "";
@@ -478,7 +491,9 @@
         setCount("Status", '<a href="' + esc(S.recording) + '" target="_blank" rel="noopener">Watch the recording</a>', true);
         pillText.textContent = "Recording available" + nextTxt;
       } else if (recs) {
-        setCount("Recordings", recs + (recs === 1 ? " video" : " videos"));
+        var folder = thisEvent().recordingsUrl, n = recs + (recs === 1 ? " video" : " videos");
+        if (folder) setCount("Recordings", '<a href="' + esc(folder) + '" target="_blank" rel="noopener" title="Opens the recordings folder">' + n + "</a>", true);
+        else setCount("Recordings", n);
         pillText.textContent = "Recordings available" + nextTxt;
       } else {
         setCount("Status", "Ended");

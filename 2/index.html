@@ -136,11 +136,22 @@
         .sort(function (a, b) { return a.date < b.date ? 1 : -1; })[0];
       if (!last) return;
       function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+      var play = '<span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg></span>';
       document.getElementById("recsTitle").textContent = "Missed " + last.label + "? Watch the recordings";
-      document.getElementById("recList").innerHTML = last.recordings.map(function (r) {
-        return '<a class="rec" href="' + esc(r.url) + '" target="_blank" rel="noopener"><span class="ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 5l12 7-12 7z"/></svg></span>' +
+      // one entry point (public folder share link); videos with an own url get their own button
+      var own = last.recordings.filter(function (r) { return r.url; });
+      var inFolder = last.recordings.filter(function (r) { return !r.url; });
+      var html = own.map(function (r) {
+        return '<a class="rec" href="' + esc(r.url) + '" target="_blank" rel="noopener">' + play +
           "<span><b>" + esc(r.title) + "</b><small>" + esc(last.label) + " · recording</small></span></a>";
       }).join("");
+      if (inFolder.length && last.recordingsUrl) {
+        html = '<a class="rec" href="' + esc(last.recordingsUrl) + '" target="_blank" rel="noopener">' + play +
+          "<span><b>" + esc(last.label) + " · " + inFolder.length + (inFolder.length === 1 ? " video" : " videos") + "</b><small>" +
+          esc(inFolder.map(function (r) { return r.title; }).join(" · ")) + "</small></span></a>" + html;
+      }
+      if (!html) return;
+      document.getElementById("recList").innerHTML = html;
       document.getElementById("recs").hidden = false;
     })();
   </script>
